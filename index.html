@@ -1,1192 +1,1237 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPAGO - Portal de Pagos Inteligente</title>
-    <!-- Tailwind CSS para diseño ágil y responsive -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter como alternativa limpia y geométrica a Brockmann -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome para iconografía complementaria y minimalista de líneas delgadas -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Configuración de colores corporativos según Manual de Marca UPAGO -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        upago: {
-                            blue: '#3F6FE8',
-                            green: '#7AC68C',
-                            dark: '#1E1E1E', /* Ajustado a un gris oscuro premium profundo como la imagen */
-                            lightGreen: '#A8FF9C',
-                            lightRed: '#C16565',
-                            lightBlue: '#AEC8E9',
-                            beige: '#E8E8DF',
-                            grayBg: '#F3F4F6'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F3F4F6;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UPAGO – Portal de Pagos AIEP</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script>
+tailwind.config = {
+  theme: { extend: { colors: {
+    upago: { blue:'#3F6FE8', green:'#7AC68C', dark:'#1E1E1E',
+              lightGreen:'#A8FF9C', lightRed:'#C16565', lightBlue:'#AEC8E9' }
+  }, fontFamily: { sans:['Inter','sans-serif'] } } }
+}
+</script>
+<style>
+body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
+.scrollbar-hide::-webkit-scrollbar { display:none; }
+.scrollbar-hide { -ms-overflow-style:none; scrollbar-width:none; }
+.screen { display:none; }
+.screen.active { display:block; }
+</style>
 </head>
 <body class="text-upago-dark min-h-screen antialiased">
+<div class="min-h-screen flex">
 
-    <!-- Estructura Principal: Sidebar + Área de Contenido -->
-    <div class="min-h-screen flex">
-        
-        <!-- SIDEBAR IZQUIERDO (Fiel a Ejemplo.jpg) -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#121212] text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between border-r border-[#1a1a1a]">
-            
-            <div class="flex flex-col h-full overflow-y-auto scrollbar-hide">
-                <!-- Header del Sidebar con el nuevo Logo de UPAGO y botón de cerrar en móviles -->
-                <div class="p-6 border-b border-white/5 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <!-- El Nuevo Logo Vectorial Provisto (Optimizado con fills directos) -->
-                        <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480.69 109.14" class="h-9 w-auto">
-                            <g id="Ilustración_12" data-name="Ilustración 12">
-                                <g>
-                                    <g>
-                                        <path fill="#3f6fe8" d="M68.86,26.88v35.71c0,9.27-2.38,16.42-7.08,21.26-4.69,4.83-10.76,7.28-18.05,7.28s-13.39-2.45-18.13-7.29c-4.74-4.84-7.15-11.99-7.15-21.26V20.82L0,1.93v61.84c0,13.78,4.19,24.89,12.45,33,8.26,8.11,18.78,12.22,31.28,12.22s22.9-4.11,31.21-12.22c8.31-8.11,12.53-19.22,12.53-33v-18.02l-18.6-18.88Z"/>
-                                        <g>
-                                            <polygon fill="#ffffff" points="207.94 1.19 165.38 107.21 184.69 107.21 216.72 26.04 232.7 66.55 238.93 82.58 248.6 107.21 268.36 107.21 225.65 1.19 207.94 1.19"/>
-                                            <path fill="#ffffff" d="M464.6,15.93c-10.68-10.57-23.77-15.93-38.93-15.93s-28.38,5.34-39,15.86c-10.62,10.53-16.01,23.55-16.01,38.71s5.39,28.19,16.01,38.71c10.62,10.52,23.74,15.86,39,15.86s28.26-5.36,38.93-15.93c10.67-10.57,16.09-23.57,16.09-38.64s-5.41-28.06-16.09-38.64ZM461.49,54.57c0,10.15-3.5,18.9-10.42,26.01-6.91,7.1-15.45,10.7-25.4,10.7s-18.5-3.6-25.4-10.7c-6.91-7.1-10.41-15.85-10.41-26.01s3.5-18.9,10.41-26.01c6.9-7.1,15.45-10.7,25.4-10.7s18.49,3.6,25.4,10.7c6.91,7.11,10.42,15.86,10.42,26.01Z"/>
-                                            <path fill="#ffffff" d="M329.44,70.1h12.47v13.07c-6.7,5.37-14.1,8.1-22.01,8.1-9.95,0-18.47-3.6-25.33-10.7-6.86-7.1-10.34-15.85-10.34-26.01s3.48-18.91,10.34-26.01c6.86-7.1,15.38-10.7,25.33-10.7,8.59,0,16.37,3.04,23.14,9.03l.53.47,11.74-13.99-.53-.45c-10.18-8.58-21.91-12.93-34.88-12.93-15.16,0-28.23,5.36-38.86,15.93-10.62,10.57-16.01,23.57-16.01,38.63s5.39,28.06,16.01,38.63c10.62,10.57,23.69,15.93,38.86,15.93s28.52-5.91,39.68-17.58l.19-.2v-37.63h-46.71l16.38,16.38Z"/>
-                                            <path fill="#ffffff" d="M165.98,12.44h0c-7.18-6.97-16.75-10.51-28.46-10.51h-33.05v105.28h18.6v-25.25l-.03-.69v-28.94l.03.03V19.2h13.26c6.71,0,12.01,1.83,15.77,5.45,3.75,3.61,5.65,8.28,5.65,13.9s-1.9,10.29-5.65,13.9c-3.76,3.61-9.06,5.45-15.77,5.45h-10.69l16.2,16.37h1.54c.16,0,4.06.01,6.63-.68,6.12-1.66,11.46-4.66,15.89-8.93,7.23-6.98,10.9-15.76,10.9-26.1s-3.64-19.12-10.82-26.1Z"/>
-                                        </g>
-                                    </g>
-                                    <polygon fill="#7ac68c" points="68.61 1.93 68.61 21.77 88.45 21.77 68.61 1.93"/>
-                                </g>
-                            </g>
-                        </svg>
-                    </div>
-                    <!-- Botón de cerrar para dispositivos móviles -->
-                    <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                </div>
-
-                <!-- Menú de Navegación del Sidebar -->
-                <div class="px-4 py-4 flex-1">
-                    <div class="flex items-center justify-between px-3 pb-3 mb-6 border-b border-white/5">
-                        <span class="text-xs font-bold text-gray-400 tracking-wider uppercase">Menú</span>
-                    </div>
-
-                    <div class="space-y-6">
-                        <!-- Beneficios de Tener Cuenta -->
-                        <div class="space-y-3">
-                            <span class="text-[10px] font-extrabold text-upago-blue tracking-wider uppercase px-3 block">Beneficios de tener cuenta</span>
-                            
-                            <nav class="space-y-1">
-                                <a href="#" onclick="showFeatureAlert('Historial de Pagos')" class="flex items-center px-3 py-3 text-sm text-gray-300 rounded-xl hover:bg-white/5 hover:text-white transition-all group">
-                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center mr-3 group-hover:bg-upago-blue/20 transition-all">
-                                        <i class="fa-solid fa-receipt text-xs text-[#7AC68C]"></i>
-                                    </div>
-                                    <span class="text-xs font-medium">Consultar historial de pagos</span>
-                                </a>
-
-                                <a href="#" onclick="showFeatureAlert('Asociar/Desvincular Pagos')" class="flex items-center px-3 py-3 text-sm text-gray-300 rounded-xl hover:bg-white/5 hover:text-white transition-all group">
-                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center mr-3 group-hover:bg-upago-blue/20 transition-all">
-                                        <i class="fa-solid fa-credit-card text-xs text-[#7AC68C]"></i>
-                                    </div>
-                                    <span class="text-xs font-medium">Asociar o desvincular pagos</span>
-                                </a>
-
-                                <a href="#" onclick="showFeatureAlert('Configuración PAT/PAC')" class="flex items-center px-3 py-3 text-sm text-gray-300 rounded-xl hover:bg-white/5 hover:text-white transition-all group">
-                                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center mr-3 group-hover:bg-upago-blue/20 transition-all">
-                                        <i class="fa-solid fa-sliders text-xs text-[#7AC68C]"></i>
-                                    </div>
-                                    <span class="text-xs font-medium">Configuración de PAT/PAC</span>
-                                </a>
-                            </nav>
-                        </div>
-
-                        <!-- Botón Iniciar Sesión -->
-                        <div class="px-3 pt-4">
-                            <button onclick="showFeatureAlert('Iniciar Sesión')" class="w-full bg-[#7AC68C] hover:bg-[#68b279] text-[#121212] font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors">
-                                <i class="fa-solid fa-right-to-bracket"></i>
-                                <span>Iniciar sesión</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Footer de Soporte/Contacto Diego -->
-                <div class="p-6 bg-[#1a1a1a]/50 border-t border-white/5 space-y-4">
-                    <div class="space-y-1">
-                        <p class="text-xs font-bold text-[#7AC68C]">Contacta a Diego</p>
-                        <a href="mailto:diego.diaz@upago.cl" class="text-xs text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-                            <i class="fa-regular fa-envelope"></i>
-                            <span>diego.diaz@upago.cl</span>
-                        </a>
-                    </div>
-                    <!-- Botón de Whatsapp en verde oficial -->
-                    <a href="https://wa.me/56912345678" target="_blank" class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors">
-                        <i class="fa-brands fa-whatsapp text-sm"></i>
-                        <span>Whatsapp</span>
-                    </a>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Backdrop para móviles al desplegar sidebar -->
-        <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden lg:hidden"></div>
-
-        <!-- ÁREA DE CONTENIDO (Desplazada en desktop por el sidebar) -->
-        <div class="flex-1 flex flex-col min-w-0 lg:ml-72 transition-all">
-            
-            <!-- PORTAL DE CABECERA CUSTOMIZADO (Basado fielmente en Ejemplo.jpg) -->
-            <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-                    
-                    <!-- Lado Izquierdo: Movistar + Info Cliente -->
-                    <div class="flex items-center space-x-3">
-                        <!-- Toggle de menú móvil -->
-                        <button onclick="toggleSidebar()" class="lg:hidden p-2 text-gray-500 hover:text-gray-700 transition-colors mr-1">
-                            <i class="fa-solid fa-bars text-xl"></i>
-                        </button>
-
-                        <!-- Logotipo del Canal de Recaudación (Fiel al logo Movistar 'M' de la imagen) -->
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 flex-shrink-0 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center overflow-hidden">
-                                <svg class="h-8 w-auto" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15,75 C25,45 40,25 50,25 C60,25 75,45 85,75 C87,81 77,83 74,75 C67,55 58,40 50,40 C42,40 33,55 26,75 C23,83 13,81 15,75 Z" fill="#00A9E0"/>
-                                    <path d="M25,75 C32,55 42,42 50,42 C58,42 68,55 75,75 C77,80 69,82 67,76 C62,60 56,52 50,52 C44,52 38,60 33,76 C31,82 23,80 25,75 Z" fill="#5BBE24"/>
-                                </svg>
-                            </div>
-                            <!-- Datos del Cliente Identificado -->
-                            <div class="leading-tight">
-                                <p class="text-sm font-extrabold text-[#3F6FE8] tracking-tight">marco betancourt</p>
-                                <p class="text-xs font-bold text-[#7AC68C]">18052080-5</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Centro: Portal de Pagos Customizado -->
-                    <div class="hidden md:block text-center flex-1">
-                        <h1 class="text-base font-extrabold text-upago-dark tracking-tight">Portal de Pagos Customizado</h1>
-                    </div>
-
-                    <!-- Lado Derecho: Bienvenida/o y Cancelar Operación -->
-                    <div class="flex items-center space-x-4">
-                        <div class="text-right hidden sm:block">
-                            <span class="text-xs text-gray-400 font-bold block">Bienvenida/o</span>
-                        </div>
-                        
-                        <!-- Botón de cancelar con diseño de cápsula ligera -->
-                        <button onclick="cancelOperation()" class="text-xs font-bold text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 px-4 py-2 rounded-full transition-all flex items-center gap-1.5 shadow-sm">
-                            <i class="fa-solid fa-power-off text-[10px]"></i> Cancelar Operación
-                        </button>
-                    </div>
-                </div>
-            </header>
-
-            <!-- BARRA DE PASOS EN TIEMPO REAL -->
-            <nav class="bg-white border-b border-gray-100 py-4 shadow-sm">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <!-- Indicador de pasos visual tipo Chevron moderno -->
-                        <div class="flex items-center space-x-2 w-full justify-between sm:justify-start sm:space-x-8">
-                            <!-- Paso 1: Completado -->
-                            <div class="flex items-center text-upago-green opacity-80">
-                                <span class="h-7 w-7 rounded-full bg-upago-green/15 flex items-center justify-center font-bold text-xs border border-upago-green/30">
-                                    <i class="fa-solid fa-check"></i>
-                                </span>
-                                <span class="ml-2 text-xs font-semibold hidden md:inline">Selecciona Cuentas a Pagar</span>
-                                <span class="ml-2 text-xs font-semibold md:hidden">Cuentas</span>
-                            </div>
-
-                            <!-- Separador -->
-                            <div class="h-px w-8 bg-gray-200 flex-1 sm:flex-initial"></div>
-
-                            <!-- Paso 2: Activo -->
-                            <div class="flex items-center text-upago-blue" id="step-payment-nav">
-                                <span class="h-7 w-7 rounded-full bg-upago-blue text-white flex items-center justify-center font-bold text-xs" id="step-payment-badge">
-                                    2
-                                </span>
-                                <span class="ml-2 text-xs font-bold" id="step-payment-label">Selecciona Medio de Pago</span>
-                            </div>
-
-                            <!-- Separador -->
-                            <div class="h-px w-8 bg-gray-200 flex-1 sm:flex-initial"></div>
-
-                            <!-- Paso 3: Siguiente -->
-                            <div class="flex items-center text-gray-400" id="step-receipt-nav">
-                                <span class="h-7 w-7 rounded-full bg-gray-100 flex items-center justify-center font-bold text-xs border border-gray-200" id="step-receipt-badge">
-                                    3
-                                </span>
-                                <span class="ml-2 text-xs font-medium" id="step-receipt-label">Recibe tu comprobante</span>
-                            </div>
-                        </div>
-
-                        <!-- Monto rápido superior (Mobile) -->
-                        <div class="flex items-center justify-between w-full sm:w-auto bg-upago-dark text-white px-4 py-2 rounded-xl sm:hidden">
-                            <span class="text-xs opacity-80">Total a pagar:</span>
-                            <span class="text-base font-bold ml-2 text-upago-lightGreen" id="mobile-total-display">$100.000 CLP</span>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- CONTENIDO PRINCIPAL -->
-            <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
-                    <!-- Columna Izquierda: Selector de Métodos de Pago con Jerarquía (2 de 3 columnas en desktop) -->
-                    <div class="lg:col-span-2 space-y-6" id="left-column-payment">
-                        
-                        <!-- Encabezado de la Sección & Buscador Integrado -->
-                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div>
-                                <h1 class="text-2xl font-extrabold tracking-tight text-upago-dark">Selecciona tu medio de pago</h1>
-                                <p class="text-sm text-gray-500 mt-1">Elige la opción que más te acomode para proceder con tu pago seguro.</p>
-                            </div>
-                            
-                            <!-- Buscador en tiempo real de bancos o tarjetas -->
-                            <div class="relative min-w-[240px]">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                                </span>
-                                <input type="text" id="searchInput" oninput="filterPaymentMethods()" placeholder="Buscar banco o medio de pago..." class="w-full pl-9 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-upago-blue focus:border-transparent shadow-sm placeholder:text-gray-400 transition-all">
-                            </div>
-                        </div>
-
-                        <!-- Banner Informativo inteligente con la Fórmula UPAGO -->
-                        <div class="bg-gradient-to-r from-upago-blue to-[#5B88FC] rounded-2xl p-5 text-white shadow-md relative overflow-hidden">
-                            <!-- Patrones circulares sutiles inspirados en el manual de marca -->
-                            <div class="absolute right-0 bottom-0 opacity-10 translate-x-10 translate-y-10">
-                                <svg width="200" height="200" viewBox="0 0 100 100" fill="currentColor">
-                                    <circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none" />
-                                    <circle cx="50" cy="50" r="25" stroke="white" stroke-width="2" fill="none" />
-                                </svg>
-                            </div>
-                            <div class="flex items-start gap-4">
-                                <div class="p-2.5 bg-white/10 rounded-xl">
-                                    <i class="fa-solid fa-shield-halved text-xl text-upago-lightGreen"></i>
-                                </div>
-                                <div class="space-y-1">
-                                    <span class="bg-upago-lightGreen text-upago-dark text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider">Asegura tu pago</span>
-                                    <h3 class="text-base font-bold">¿Quieres simplificar tus cobros futuros?</h3>
-                                    <p class="text-xs text-white/85 leading-relaxed">Puedes activar el cargo automático (PAT/PAC) en el siguiente paso. Evita multas y obtén un 65% de mejores tiempos de recuperación con UPAGO.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                            <!-- Cabecera de pestañas responsivas y táctiles -->
-                            <div class="flex border-b border-gray-100 bg-gray-50/50 p-1 gap-1 overflow-x-auto scrollbar-hide">
-                                <!-- Pestaña 1: Bancos -->
-                                <button onclick="switchTab('tab-bancos')" id="btn-tab-bancos" class="tab-btn flex-1 min-w-[120px] py-3 px-3 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-upago-blue bg-white shadow-sm border border-gray-100">
-                                    <i class="fa-solid fa-building-columns text-base"></i>
-                                    <span class="text-center">Bancos y Transferencia</span>
-                                </button>
-                                <!-- Pestaña 2: Tarjetas -->
-                                <button onclick="switchTab('tab-tarjetas')" id="btn-tab-tarjetas" class="tab-btn flex-1 min-w-[120px] py-3 px-3 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-gray-500 hover:text-upago-dark hover:bg-white/50">
-                                    <i class="fa-regular fa-credit-card text-base"></i>
-                                    <span class="text-center">Tarjetas de Crédito/Débito</span>
-                                </button>
-                                <!-- Pestaña 3: Billeteras Digitales -->
-                                <button onclick="switchTab('tab-apps')" id="btn-tab-apps" class="tab-btn flex-1 min-w-[120px] py-3 px-3 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-gray-500 hover:text-upago-dark hover:bg-white/50">
-                                    <i class="fa-solid fa-mobile-screen-button text-base"></i>
-                                    <span class="text-center">Billeteras & Apps</span>
-                                </button>
-                                <!-- Pestaña 4: Efectivo -->
-                                <button onclick="switchTab('tab-efectivo')" id="btn-tab-efectivo" class="tab-btn flex-1 min-w-[120px] py-3 px-3 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-gray-500 hover:text-upago-dark hover:bg-white/50">
-                                    <i class="fa-solid fa-money-bill-transfer text-base"></i>
-                                    <span class="text-center">Efectivo / Presencial</span>
-                                </button>
-                            </div>
-
-                            <div class="p-6">
-                                
-                                <!-- TAB 1: BANCOS Y TRANSFERENCIAS -->
-                                <div id="tab-bancos" class="tab-content block space-y-4">
-                                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Transferencia segura integrada por UPAGO</h4>
-                                        <span class="text-[11px] bg-upago-blue/10 text-upago-blue font-bold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-bolt mr-1"></i>Abono Inmediato</span>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <!-- Opción: Banco de Chile -->
-                                        <div onclick="selectPaymentMethod('Banco de Chile', 'bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-gradient-to-br from-blue-900 to-blue-700 rounded-lg flex items-center justify-center text-white font-serif font-extrabold text-xs">
-                                                    BCh
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Banco de Chile</p>
-                                                    <p class="text-xs text-gray-400">Transferencia Electrónica Directa</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Opción: Santander -->
-                                        <div onclick="selectPaymentMethod('Banco Santander', 'bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-red-600 rounded-lg flex items-center justify-center text-white text-lg">
-                                                    <i class="fa-solid fa-fire-flame-curved"></i>
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Santander</p>
-                                                    <p class="text-xs text-gray-400">Paga con tu clave de Banco Santander</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Opción: BancoEstado -->
-                                        <div onclick="selectPaymentMethod('BancoEstado', 'bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-gradient-to-r from-orange-500 to-blue-900 rounded-lg flex items-center justify-center text-white font-black text-xs">
-                                                    BE
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">BancoEstado / CuentaRUT</p>
-                                                    <p class="text-xs text-gray-400">Incluye Pago con App BancoEstado</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Opción: BCI -->
-                                        <div onclick="selectPaymentMethod('Banco BCI', 'bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-emerald-950 rounded-lg flex items-center justify-center text-emerald-400 font-extrabold text-[11px] border border-emerald-800">
-                                                    bci
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Banco BCI / MACH Bank</p>
-                                                    <p class="text-xs text-gray-400">Paga directo desde tu App de BCI</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Opción: Itaú -->
-                                        <div onclick="selectPaymentMethod('Banco Itaú', 'bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-orange-600 rounded-lg flex items-center justify-center text-white font-extrabold text-sm">
-                                                    itaú
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Itaú</p>
-                                                    <p class="text-xs text-gray-400">Acceso directo a portal de transferencias</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Opción: Scotiabank -->
-                                        <div onclick="selectPaymentMethod('Scotiabank', 'bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-red-700 rounded-lg flex items-center justify-center text-white font-extrabold text-lg">
-                                                    S
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Scotiabank</p>
-                                                    <p class="text-xs text-gray-400">Autoriza con tu Token ScotiaKey</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- TAB 2: TARJETAS DE CRÉDITO Y DÉBITO -->
-                                <div id="tab-tarjetas" class="tab-content hidden space-y-4">
-                                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Pasarelas de Pago Autorizadas</h4>
-                                        <span class="text-[11px] bg-upago-green/15 text-upago-green font-bold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-percent mr-1"></i>Cuotas Sin Interés</span>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <!-- Webpay Plus Transbank -->
-                                        <div onclick="selectPaymentMethod('Webpay Plus', 'tarjetas')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-purple-700 rounded-lg flex items-center justify-center text-white text-xs font-bold leading-none p-1 text-center">
-                                                    web<br/>pay
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Webpay Plus (Transbank)</p>
-                                                    <p class="text-xs text-gray-400">Hasta 3 cuotas sin interés bancario</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Webpay OneClick -->
-                                        <div onclick="selectPaymentMethod('Webpay OneClick', 'tarjetas')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xs font-bold leading-none p-1 text-center">
-                                                    1-clic
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Webpay OneClick</p>
-                                                    <p class="text-xs text-gray-400">Vincula tu tarjeta y paga en un toque</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Getnet Santander -->
-                                        <div onclick="selectPaymentMethod('Getnet', 'tarjetas')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-red-100 text-red-600 rounded-lg flex items-center justify-center font-bold text-sm">
-                                                    Get.
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Getnet (Santander)</p>
-                                                    <p class="text-xs text-gray-400">Tarjetas de Débito, Crédito y Prepago</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Prepago Webpay -->
-                                        <div onclick="selectPaymentMethod('Prepago Webpay', 'tarjetas')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center font-bold text-xs">
-                                                    PRE.
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Tarjetas de Prepago</p>
-                                                    <p class="text-xs text-gray-400">Tenpo, Mercado Pago, MACH, etc.</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- TAB 3: BILLETERAS Y APPS -->
-                                <div id="tab-apps" class="tab-content hidden space-y-4">
-                                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Billeteras Móviles de LATAM</h4>
-                                        <span class="text-[11px] bg-amber-100 text-amber-700 font-bold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-qrcode mr-1"></i>Pago Móvil Seguro</span>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <!-- MACH -->
-                                        <div onclick="selectPaymentMethod('MACH', 'apps')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-indigo-950 text-indigo-400 rounded-lg flex items-center justify-center font-extrabold text-xs tracking-tight">
-                                                    MACH
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">MACH (Bci)</p>
-                                                    <p class="text-xs text-gray-400">Paga con saldo MACH desde tu celular</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Kushki -->
-                                        <div onclick="selectPaymentMethod('Kushki', 'apps')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-emerald-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">
-                                                    K.
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Débito Kushki</p>
-                                                    <p class="text-xs text-gray-400">Débito directo desde cuentas de ahorro</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Mercado Pago -->
-                                        <div onclick="selectPaymentMethod('Mercado Pago', 'apps')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-sky-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">
-                                                    MP
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Mercado Pago</p>
-                                                    <p class="text-xs text-gray-400">Paga de forma instantánea con tu billetera</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Unipay -->
-                                        <div onclick="selectPaymentMethod('Unipay', 'apps')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-teal-800 text-teal-300 rounded-lg flex items-center justify-center font-black text-[10px]">
-                                                    UNIPAY
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Unipay</p>
-                                                    <p class="text-xs text-gray-400">Paga seguro con tarjetas Unimarc afiliadas</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- TAB 4: EFECTIVO / PRESENCIAL -->
-                                <div id="tab-efectivo" class="tab-content hidden space-y-4">
-                                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Cajas autorizadas a nivel nacional</h4>
-                                        <span class="text-[11px] bg-purple-100 text-purple-700 font-bold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-store mr-1"></i>Comercio Local</span>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <!-- Unired -->
-                                        <div onclick="selectPaymentMethod('Unired', 'efectivo')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-red-600 rounded-lg flex items-center justify-center text-white text-xs font-extrabold tracking-tight">
-                                                    unired
-                                                </div>
-                                                <div>
-                                                    <div class="flex items-center gap-1.5">
-                                                        <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Unired (Efectivo/Caja)</p>
-                                                        <span class="bg-red-50 text-red-600 font-bold text-[9px] px-1.5 py-0.2 rounded-full border border-red-200">Recomendado</span>
-                                                    </div>
-                                                    <p class="text-xs text-gray-400">Paga con cupón impreso en locales Unimarc</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- Servipag -->
-                                        <div onclick="selectPaymentMethod('Servipag', 'efectivo')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-amber-400 rounded-lg flex items-center justify-center text-blue-900 font-extrabold text-xs">
-                                                    PAG
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">Servipag Express</p>
-                                                    <p class="text-xs text-gray-400">Cajas presenciales y abono bancario</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-
-                                        <!-- CajaVecina BancoEstado -->
-                                        <div onclick="selectPaymentMethod('CajaVecina', 'efectivo')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-10 h-10 flex-shrink-0 bg-blue-800 text-orange-400 rounded-lg flex items-center justify-center font-extrabold text-[10px]">
-                                                    C.VEC
-                                                </div>
-                                                <div>
-                                                    <p class="text-sm font-bold group-hover:text-upago-blue transition-colors">CajaVecina</p>
-                                                    <p class="text-xs text-gray-400">Disponibilidad en almacenes y almacenes de barrio</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-gray-300 group-hover:text-upago-blue transition-colors"><i class="fa-solid fa-chevron-right text-xs"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Footer de Garantías y Certificados -->
-                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs text-gray-500">
-                            <div class="flex items-center space-x-2">
-                                <i class="fa-solid fa-user-shield text-upago-blue text-sm"></i>
-                                <span>En UPAGO resguardamos la integridad y confidencialidad de tus transacciones.</span>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <div class="flex items-center space-x-1.5 bg-white border border-gray-200 px-2 py-1 rounded-md shadow-sm">
-                                    <span class="w-2 h-2 rounded-full bg-upago-green"></span>
-                                    <span class="font-extrabold text-[9px] text-upago-dark tracking-wider">ISO 27001</span>
-                                </div>
-                                <div class="flex items-center space-x-1.5 bg-white border border-gray-200 px-2 py-1 rounded-md shadow-sm">
-                                    <span class="w-2 h-2 rounded-full bg-upago-green"></span>
-                                    <span class="font-extrabold text-[9px] text-upago-dark tracking-wider">PCI DSS</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="space-y-6">
-                        <!-- Tarjeta de Resumen -->
-                        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sticky top-24 space-y-6">
-                            <div class="border-b border-gray-100 pb-4">
-                                <h2 class="text-base font-extrabold text-upago-dark">Resumen de tu Operación</h2>
-                                <p class="text-xs text-gray-400 mt-0.5">Control y transparencia en tiempo real</p>
-                            </div>
-
-                            <!-- Detalles del ítem de cobro -->
-                            <div class="space-y-4">
-                                <div class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
-                                    <div>
-                                        <p class="text-xs text-gray-500 font-semibold">Institución Recaudadora</p>
-                                        <p class="text-sm font-bold text-upago-dark mt-0.5">Universidad Central de Chile</p>
-                                        <p class="text-xs text-gray-400 mt-0.5">ID Servicio: #UP-2026-9482</p>
-                                    </div>
-                                    <div class="bg-upago-blue/5 text-upago-blue p-2.5 rounded-xl">
-                                        <i class="fa-solid fa-graduation-cap text-lg"></i>
-                                    </div>
-                                </div>
-
-                                <!-- Detalle de cuentas a pagar -->
-                                <div class="space-y-3">
-                                    <div class="flex items-center justify-between text-xs">
-                                        <span class="text-gray-500 font-medium">Cuota 01/10 (Matrícula)</span>
-                                        <span class="font-semibold text-upago-dark">$85.000 CLP</span>
-                                    </div>
-                                    <div class="flex items-center justify-between text-xs">
-                                        <span class="text-gray-500 font-medium">Seguro Escolar Obligatorio</span>
-                                        <span class="font-semibold text-upago-dark">$15.000 CLP</span>
-                                    </div>
-                                    <div class="flex items-center justify-between text-xs border-t border-gray-100 pt-3">
-                                        <span class="text-gray-500 font-medium">Subtotal</span>
-                                        <span class="font-semibold text-upago-dark">$100.000 CLP</span>
-                                    </div>
-                                    <div class="flex items-center justify-between text-xs text-upago-green font-semibold">
-                                        <span>Descuento de Pago Temprano (UPAGO)</span>
-                                        <span>$0 CLP</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Indicador interactivo del método seleccionado -->
-                            <div class="border-t border-gray-100 pt-4 space-y-3">
-                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Método de pago elegido</p>
-                                <div id="selected-method-badge" class="bg-upago-blue/5 border border-upago-blue/10 rounded-2xl p-3.5 flex items-center justify-between">
-                                    <div class="flex items-center space-x-3">
-                                        <span class="h-8 w-8 bg-upago-blue/15 text-upago-blue rounded-xl flex items-center justify-center text-sm font-bold" id="method-icon-placeholder">
-                                            <i class="fa-solid fa-building-columns"></i>
-                                        </span>
-                                        <div>
-                                            <p class="text-xs font-semibold text-gray-500">Seleccionado</p>
-                                            <p class="text-sm font-bold text-upago-dark" id="selected-method-name">Banco de Chile</p>
-                                        </div>
-                                    </div>
-                                    <span class="h-2.5 w-2.5 rounded-full bg-upago-green animate-pulse"></span>
-                                </div>
-                            </div>
-
-                            <!-- Importe Total Destacado -->
-                            <div class="border-t border-gray-100 pt-4 flex items-baseline justify-between">
-                                <span class="text-sm font-bold text-upago-dark">Total a pagar:</span>
-                                <div class="text-right">
-                                    <span class="text-2xl font-extrabold text-upago-blue" id="totalAmount">$100.000</span>
-                                    <span class="text-xs text-gray-400 font-bold ml-1">CLP</span>
-                                </div>
-                            </div>
-
-                            <!-- Botón de Acción Principal -->
-                            <button onclick="triggerPaymentProcessing()" class="w-full bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-upago-blue/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
-                                <span>PAGAR AHORA CON SEGURO</span>
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-
-                            <!-- Beneficio garantizado UPAGO -->
-                            <div class="flex items-center justify-center space-x-1.5 text-[10px] text-upago-green font-extrabold uppercase tracking-wider">
-                                <i class="fa-solid fa-circle-check"></i>
-                                <span>Ingresos Asegurados y Conciliados en Línea</span>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </main>
-
-            <!-- PANTALLA DE COMPROBANTE (Inicialmente oculta) -->
-            <div id="receipt-screen" class="hidden max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex-grow flex items-center justify-center">
-                <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 w-full text-center space-y-6 relative overflow-hidden">
-                    <div class="absolute inset-x-0 top-0 h-2 bg-upago-green"></div>
-
-                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-upago-green/10 text-upago-green border-4 border-white shadow-md mx-auto relative z-10">
-                        <i class="fa-solid fa-circle-check text-4xl"></i>
-                    </div>
-
-                    <div class="space-y-1">
-                        <h2 class="text-2xl font-extrabold text-upago-dark">¡Recaudación Exitosa!</h2>
-                        <p class="text-sm text-upago-green font-bold">Comprobante de pago procesado y conciliado al instante</p>
-                    </div>
-
-                    <div class="border border-dashed border-gray-200 rounded-2xl p-6 bg-gray-50 text-left space-y-4">
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-3">
-                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Código de Operación</p>
-                            <p class="text-sm font-mono font-bold text-upago-dark">UP-TX-839281-2026</p>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4 text-xs">
-                            <div>
-                                <p class="text-gray-400 font-medium">Razón Social</p>
-                                <p class="font-bold text-upago-dark mt-0.5">JANUS SpA (UPAGO)</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 font-medium">Institución Recaudada</p>
-                                <p class="font-bold text-upago-dark mt-0.5">U. Central de Chile</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 font-medium">Contribuyente / Alumno</p>
-                                <p class="font-bold text-upago-dark mt-0.5" id="receiptUserName">Marco Betancourt</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 font-medium">Medio de Pago Utilizado</p>
-                                <p class="font-bold text-upago-dark mt-0.5" id="receiptMethodName">Banco de Chile</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 font-medium">Fecha y Hora de Autorización</p>
-                                <p class="font-bold text-upago-dark mt-0.5" id="receiptDateTime">01 de Junio de 2026, 13:47</p>
-                            </div>
-                            <div>
-                                <p class="text-gray-400 font-medium">Estado de Conciliación</p>
-                                <p class="font-bold text-upago-green mt-0.5 flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-upago-green"></span> 100% Conciliado
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-gray-100 pt-3 flex items-baseline justify-between">
-                            <span class="text-sm font-bold text-upago-dark">Monto Recaudado:</span>
-                            <span class="text-xl font-extrabold text-upago-blue">$100.000 CLP</span>
-                        </div>
-                    </div>
-
-                    <p class="text-xs text-gray-400 px-6 leading-relaxed">
-                        Este cobro se encuentra respaldado por el software de automatización de UPAGO, con operaciones autorizadas en Chile, México y Colombia. Tu entidad bancaria recibirá la validación de fondos en un tiempo estimado de un minuto.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-                        <button onclick="downloadReceipt()" class="w-full sm:w-auto bg-upago-dark hover:bg-upago-dark/95 text-white font-extrabold py-3 px-6 rounded-xl text-xs tracking-wider transition-all shadow-md flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-file-pdf"></i> Descargar Comprobante PDF
-                        </button>
-                        <button onclick="copyReceiptCode()" class="w-full sm:w-auto border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold py-3 px-6 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
-                            <i class="fa-regular fa-copy"></i> Copiar Código
-                        </button>
-                        <button onclick="restartPortal()" class="w-full sm:w-auto bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-3 px-6 rounded-xl text-xs tracking-wider transition-all flex items-center justify-center gap-2">
-                            Volver a Pagar <i class="fa-solid fa-rotate-left"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- FOOTER DE MARCA -->
-            <footer class="bg-upago-dark text-white/70 py-8 border-t border-white/10 mt-12 text-xs">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div class="space-y-2 text-center md:text-left">
-                            <div class="flex items-center justify-center md:justify-start space-x-2">
-                                <span class="font-extrabold text-white text-sm tracking-wide">UPAGO</span>
-                            </div>
-                            <p class="text-white/50">Plataforma fintech líder en automatización de cobros y recuperación de deudas en LATAM.</p>
-                        </div>
-
-                        <div class="flex flex-wrap items-center justify-center gap-4 text-[11px] font-bold text-white/90">
-                            <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-upago-blue"></span> Chile (Santiago)</div>
-                            <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-upago-green"></span> México (CDMX)</div>
-                            <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-upago-lightBlue"></span> Colombia (Bogotá)</div>
-                        </div>
-
-                        <div class="text-center md:text-right text-white/40">
-                            <p>© 2026 UPAGO. Todos los derechos reservados.</p>
-                            <p class="mt-1">Fundada en 2019 • Socios Fundadores: Felipe Pastenes y Jorge Pizarro.</p>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+<!-- ═══ SIDEBAR ═══ -->
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-[#121212] text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between border-r border-[#1a1a1a]">
+  <div class="flex flex-col h-full overflow-y-auto scrollbar-hide">
+    <div class="p-6 border-b border-white/5 flex items-center justify-between">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480.69 109.14" class="h-9 w-auto">
+  <path fill="#3f6fe8" d="M68.86,26.88v35.71c0,9.27-2.38,16.42-7.08,21.26-4.69,4.83-10.76,7.28-18.05,7.28s-13.39-2.45-18.13-7.29c-4.74-4.84-7.15-11.99-7.15-21.26V20.82L0,1.93v61.84c0,13.78,4.19,24.89,12.45,33,8.26,8.11,18.78,12.22,31.28,12.22s22.9-4.11,31.21-12.22c8.31-8.11,12.53-19.22,12.53-33v-18.02l-18.6-18.88Z"/>
+  <polygon fill="#ffffff" points="207.94 1.19 165.38 107.21 184.69 107.21 216.72 26.04 232.7 66.55 238.93 82.58 248.6 107.21 268.36 107.21 225.65 1.19 207.94 1.19"/>
+  <path fill="#ffffff" d="M464.6,15.93c-10.68-10.57-23.77-15.93-38.93-15.93s-28.38,5.34-39,15.86c-10.62,10.53-16.01,23.55-16.01,38.71s5.39,28.19,16.01,38.71c10.62,10.52,23.74,15.86,39,15.86s28.26-5.36,38.93-15.93c10.67-10.57,16.09-23.57,16.09-38.64s-5.41-28.06-16.09-38.64ZM461.49,54.57c0,10.15-3.5,18.9-10.42,26.01-6.91,7.1-15.45,10.7-25.4,10.7s-18.5-3.6-25.4-10.7c-6.91-7.1-10.41-15.85-10.41-26.01s3.5-18.9,10.41-26.01c6.9-7.1,15.45-10.7,25.4-10.7s18.49,3.6,25.4,10.7c6.91,7.11,10.42,15.86,10.42,26.01Z"/>
+  <path fill="#ffffff" d="M329.44,70.1h12.47v13.07c-6.7,5.37-14.1,8.1-22.01,8.1-9.95,0-18.47-3.6-25.33-10.7-6.86-7.1-10.34-15.85-10.34-26.01s3.48-18.91,10.34-26.01c6.86-7.1,15.38-10.7,25.33-10.7,8.59,0,16.37,3.04,23.14,9.03l.53.47,11.74-13.99-.53-.45c-10.18-8.58-21.91-12.93-34.88-12.93-15.16,0-28.23,5.36-38.86,15.93-10.62,10.57-16.01,23.57-16.01,38.63s5.39,28.06,16.01,38.63c10.62,10.57,23.69,15.93,38.86,15.93s28.52-5.91,39.68-17.58l.19-.2v-37.63h-46.71l16.38,16.38Z"/>
+  <path fill="#ffffff" d="M165.98,12.44h0c-7.18-6.97-16.75-10.51-28.46-10.51h-33.05v105.28h18.6v-25.25l-.03-.69v-28.94l.03.03V19.2h13.26c6.71,0,12.01,1.83,15.77,5.45,3.75,3.61,5.65,8.28,5.65,13.9s-1.9,10.29-5.65,13.9c-3.76,3.61-9.06,5.45-15.77,5.45h-10.69l16.2,16.37h1.54c.16,0,4.06.01,6.63-.68,6.12-1.66,11.46-4.66,15.89-8.93,7.23-6.98,10.9-15.76,10.9-26.1s-3.64-19.12-10.82-26.1Z"/>
+  <polygon fill="#7ac68c" points="68.61 1.93 68.61 21.77 88.45 21.77 68.61 1.93"/>
+</svg>
+      <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white transition-colors">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+    <div class="px-4 py-4 flex-1">
+      <div class="flex items-center justify-between px-3 pb-3 mb-6 border-b border-white/5">
+        <span class="text-xs font-bold text-gray-400 tracking-wider uppercase">Menú</span>
+      </div>
+      <div class="space-y-6">
+        <div class="space-y-3">
+          <span class="text-[10px] font-extrabold text-upago-blue tracking-wider uppercase px-3 block">Beneficios de tener cuenta</span>
+          <nav class="space-y-1">
+            <a href="#" onclick="showAlert('Historial de Pagos')" class="flex items-center px-3 py-3 text-sm text-gray-300 rounded-xl hover:bg-white/5 hover:text-white transition-all group">
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center mr-3 group-hover:bg-upago-blue/20"><i class="fa-solid fa-receipt text-xs text-[#7AC68C]"></i></div>
+              <span class="text-xs font-medium">Consultar historial de pagos</span>
+            </a>
+            <a href="#" onclick="showAlert('PAT/PAC')" class="flex items-center px-3 py-3 text-sm text-gray-300 rounded-xl hover:bg-white/5 hover:text-white transition-all group">
+              <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center mr-3 group-hover:bg-upago-blue/20"><i class="fa-solid fa-sliders text-xs text-[#7AC68C]"></i></div>
+              <span class="text-xs font-medium">Configuración de PAT/PAC</span>
+            </a>
+          </nav>
         </div>
+        <div class="px-3 pt-4">
+          <button onclick="showAlert('Iniciar Sesión')" class="w-full bg-[#7AC68C] hover:bg-[#68b279] text-[#121212] font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors">
+            <i class="fa-solid fa-right-to-bracket"></i><span>Iniciar sesión</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="p-6 bg-[#1a1a1a]/50 border-t border-white/5 space-y-4">
+      <div class="space-y-1">
+        <p class="text-xs font-bold text-[#7AC68C]">Contacta a Diego</p>
+        <a href="mailto:diego.diaz@upago.cl" class="text-xs text-gray-400 hover:text-white flex items-center gap-2">
+          <i class="fa-regular fa-envelope"></i><span>diego.diaz@upago.cl</span>
+        </a>
+      </div>
+      <a href="https://wa.me/56912345678" target="_blank" class="w-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors">
+        <i class="fa-brands fa-whatsapp text-sm"></i><span>Whatsapp</span>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm hidden lg:hidden"></div>
+
+<!-- ═══ CONTENIDO ═══ -->
+<div class="flex-1 flex flex-col min-w-0 lg:ml-72">
+
+  <!-- HEADER -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden p-2 text-gray-500 hover:text-gray-700 mr-1">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+        <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 796.46 277.55" class="h-10 w-auto">
+  <defs><style>.cls-1{fill:#002345;}</style></defs>
+  <path class="cls-1" d="M165.31,0l-49.33,47.06-.03,158.23,98.76-.05-.03-158.19L165.31,0ZM.04,47v158.29s91.11-.05,91.11-.05l-.02-158.24H.04ZM329.58,205.24V47.01s-90.11,0-90.11,0v158.29s90.11-.06,90.11-.06ZM450.09,49.01l-44.49-.07-60.12,156.31,43.12.02,10.97-27.16,55.96.13,10.08,27.07,43.21-.28-58.73-156.02ZM410.64,146.83l17.09-49.64,16.62,49.72-33.71-.08ZM794.38,84.58c-3.34-14.84-13.53-26.09-27.77-31.21-7.85-2.88-15.82-4.34-24.45-4.35l-65.03-.11v156.34s40.72,0,40.72,0l.02-51.75,29.21-.28c7.69-.07,15.03-1.62,22.47-4.78,24.82-9.86,30.23-39.84,24.82-63.86ZM738.32,120.02l-20.45.57v-38.7s20.46.49,20.46.49c10.05.24,15.25,7.94,15.61,17.92.38,10.75-4.78,19.41-15.62,19.72ZM662.66,48.92h-88.86s.04,156.35.04,156.35l88.93-.09.05-34.35-48.31-.12v-26.78s45.86-.14,45.86-.14l-.04-34.31h-45.81s0-25.98,0-25.98l48.32-.12-.18-34.46ZM559.05,205.16V48.94s-40.73,0-40.73,0v156.35s40.73-.12,40.73-.12Z"/>
+</svg>
+        <div class="leading-tight ml-2">
+          <p class="text-sm font-extrabold text-[#3F6FE8]">juan marcelo osorio silva</p>
+          <p class="text-xs font-bold text-[#7AC68C]">20966649-9</p>
+        </div>
+      </div>
+      <div class="hidden md:block text-center flex-1">
+        <h1 class="text-base font-extrabold text-upago-dark tracking-tight">Portal de Pagos Customizado</h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-xs text-gray-400 font-bold hidden sm:block">Bienvenida/o</span>
+        <button onclick="cancelOp()" class="text-xs font-bold text-red-500 bg-red-50 border border-red-200 hover:bg-red-100 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm transition-all">
+          <i class="fa-solid fa-power-off text-[10px]"></i> Cancelar Operación
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA DE PASOS -->
+  <nav class="bg-white border-b border-gray-100 py-4 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between sm:justify-start sm:gap-8">
+        <div class="flex items-center" id="nav-step1">
+          <span class="h-7 w-7 rounded-full bg-upago-blue text-white flex items-center justify-center font-bold text-xs" id="badge-step1">1</span>
+          <span class="ml-2 text-xs font-bold text-upago-blue hidden md:inline">Selecciona Cuentas a Pagar</span>
+        </div>
+        <div class="h-px flex-1 bg-gray-200 max-w-[40px] sm:max-w-none"></div>
+        <div class="flex items-center text-gray-400" id="nav-step2">
+          <span class="h-7 w-7 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs" id="badge-step2">2</span>
+          <span class="ml-2 text-xs font-medium hidden md:inline">Selecciona Medio de Pago</span>
+        </div>
+        <div class="h-px flex-1 bg-gray-200 max-w-[40px] sm:max-w-none"></div>
+        <div class="flex items-center text-gray-400" id="nav-step3">
+          <span class="h-7 w-7 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs" id="badge-step3">3</span>
+          <span class="ml-2 text-xs font-medium hidden md:inline">Recibe tu comprobante</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════
+       PASO 1
+  ════════════════════════════ -->
+  <div id="screen-1" class="screen active flex-grow">
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Tabla cuotas -->
+        <div class="lg:col-span-2 space-y-4">
+          <div>
+            <h1 class="text-2xl font-extrabold tracking-tight text-upago-dark">Selecciona las cuentas a pagar</h1>
+            <p class="text-sm text-gray-500 mt-1">Revisa tus cuotas pendientes. Las marcadas en rojo están vencidas.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="border-b border-gray-100 bg-gray-50">
+                    <th class="py-3 px-4">
+                      <button onclick="toggleAll()" id="chk-all"
+                        class="w-5 h-5 rounded border-2 border-upago-blue bg-upago-blue flex items-center justify-center transition-all"
+                        title="Seleccionar / deseleccionar todas">
+                        <i class="fa-solid fa-check text-white text-[9px]" id="chk-all-icon"></i>
+                      </button>
+                    </th>
+                    <th class="py-3 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Fecha Venc.</th>
+                    <th class="py-3 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Identificación</th>
+                    <th class="py-3 px-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Monto deuda</th>
+                    <th class="py-3 px-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Opciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+
+            <tr class="cuota-row border-b border-gray-100 hover:bg-upago-blue/5 transition-colors bg-red-50/40"
+                data-id="6983203-01" data-monto="122583" data-vencida="true">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2">
+                  <button onclick="toggleCuota('6983203-01',122583)"
+                    class="check-btn w-5 h-5 rounded border-2 border-upago-blue bg-upago-blue flex items-center justify-center flex-shrink-0 transition-all"
+                    id="chk-6983203-01">
+                    <i class="fa-solid fa-check text-white text-[9px]"></i>
+                  </button>
+                  <button onclick="expandCuota('6983203-01')" class="text-upago-blue hover:text-upago-dark transition-colors">
+                    <i class="fa-solid fa-circle-plus text-base"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-xs text-gray-500 whitespace-nowrap">05/03/2023</td>
+              <td class="py-3.5 px-4 text-xs font-semibold text-upago-blue">
+                Cuota 01 – marzo 2023<span class="ml-2 text-[9px] font-bold bg-red-50 text-red-600 border border-red-200 px-1.5 py-0.5 rounded-full">Vencida</span>
+              </td>
+              <td class="py-3.5 px-4 text-xs font-bold text-upago-dark text-right whitespace-nowrap">$122.583</td>
+              <td class="py-3.5 px-4 text-xs text-gray-400 text-center">—</td>
+            </tr>
+            <tr class="cuota-row border-b border-gray-100 hover:bg-upago-blue/5 transition-colors bg-red-50/40"
+                data-id="7073053-02" data-monto="122583" data-vencida="true">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2">
+                  <button onclick="toggleCuota('7073053-02',122583)"
+                    class="check-btn w-5 h-5 rounded border-2 border-upago-blue bg-upago-blue flex items-center justify-center flex-shrink-0 transition-all"
+                    id="chk-7073053-02">
+                    <i class="fa-solid fa-check text-white text-[9px]"></i>
+                  </button>
+                  <button onclick="expandCuota('7073053-02')" class="text-upago-blue hover:text-upago-dark transition-colors">
+                    <i class="fa-solid fa-circle-plus text-base"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-xs text-gray-500 whitespace-nowrap">05/04/2023</td>
+              <td class="py-3.5 px-4 text-xs font-semibold text-upago-blue">
+                Cuota 02 – abril 2023<span class="ml-2 text-[9px] font-bold bg-red-50 text-red-600 border border-red-200 px-1.5 py-0.5 rounded-full">Vencida</span>
+              </td>
+              <td class="py-3.5 px-4 text-xs font-bold text-upago-dark text-right whitespace-nowrap">$122.583</td>
+              <td class="py-3.5 px-4 text-xs text-gray-400 text-center">—</td>
+            </tr>
+            <tr class="cuota-row border-b border-gray-100 hover:bg-upago-blue/5 transition-colors bg-red-50/40"
+                data-id="7161368-03" data-monto="122583" data-vencida="true">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2">
+                  <button onclick="toggleCuota('7161368-03',122583)"
+                    class="check-btn w-5 h-5 rounded border-2 border-upago-blue bg-upago-blue flex items-center justify-center flex-shrink-0 transition-all"
+                    id="chk-7161368-03">
+                    <i class="fa-solid fa-check text-white text-[9px]"></i>
+                  </button>
+                  <button onclick="expandCuota('7161368-03')" class="text-upago-blue hover:text-upago-dark transition-colors">
+                    <i class="fa-solid fa-circle-plus text-base"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-xs text-gray-500 whitespace-nowrap">05/05/2023</td>
+              <td class="py-3.5 px-4 text-xs font-semibold text-upago-blue">
+                Cuota 03 – mayo 2023<span class="ml-2 text-[9px] font-bold bg-red-50 text-red-600 border border-red-200 px-1.5 py-0.5 rounded-full">Vencida</span>
+              </td>
+              <td class="py-3.5 px-4 text-xs font-bold text-upago-dark text-right whitespace-nowrap">$122.583</td>
+              <td class="py-3.5 px-4 text-xs text-gray-400 text-center">—</td>
+            </tr>
+            <tr class="cuota-row border-b border-gray-100 hover:bg-upago-blue/5 transition-colors bg-red-50/40"
+                data-id="7312390-04" data-monto="122583" data-vencida="true">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2">
+                  <button onclick="toggleCuota('7312390-04',122583)"
+                    class="check-btn w-5 h-5 rounded border-2 border-upago-blue bg-upago-blue flex items-center justify-center flex-shrink-0 transition-all"
+                    id="chk-7312390-04">
+                    <i class="fa-solid fa-check text-white text-[9px]"></i>
+                  </button>
+                  <button onclick="expandCuota('7312390-04')" class="text-upago-blue hover:text-upago-dark transition-colors">
+                    <i class="fa-solid fa-circle-plus text-base"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-xs text-gray-500 whitespace-nowrap">05/06/2023</td>
+              <td class="py-3.5 px-4 text-xs font-semibold text-upago-blue">
+                Cuota 04 – junio 2023<span class="ml-2 text-[9px] font-bold bg-red-50 text-red-600 border border-red-200 px-1.5 py-0.5 rounded-full">Vencida</span>
+              </td>
+              <td class="py-3.5 px-4 text-xs font-bold text-upago-dark text-right whitespace-nowrap">$122.583</td>
+              <td class="py-3.5 px-4 text-xs text-gray-400 text-center">—</td>
+            </tr>
+            <tr class="cuota-row border-b border-gray-100 hover:bg-upago-blue/5 transition-colors "
+                data-id="912009740" data-monto="122583" data-vencida="false">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2">
+                  <button onclick="toggleCuota('912009740',122583)"
+                    class="check-btn w-5 h-5 rounded border-2 border-upago-blue bg-upago-blue flex items-center justify-center flex-shrink-0 transition-all"
+                    id="chk-912009740">
+                    <i class="fa-solid fa-check text-white text-[9px]"></i>
+                  </button>
+                  <button onclick="expandCuota('912009740')" class="text-upago-blue hover:text-upago-dark transition-colors">
+                    <i class="fa-solid fa-circle-plus text-base"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-xs text-gray-500 whitespace-nowrap">05/01/2024</td>
+              <td class="py-3.5 px-4 text-xs font-semibold text-upago-blue">
+                Cuota 05 – enero 2024
+              </td>
+              <td class="py-3.5 px-4 text-xs font-bold text-upago-dark text-right whitespace-nowrap">$122.583</td>
+              <td class="py-3.5 px-4 text-xs text-gray-400 text-center">—</td>
+            </tr>
+            <tr class="cuota-row border-b border-gray-100 hover:bg-upago-blue/5 transition-colors "
+                data-id="911999729" data-monto="122587" data-vencida="false">
+              <td class="py-3.5 px-4">
+                <div class="flex items-center gap-2">
+                  <button onclick="toggleCuota('911999729',122587)"
+                    class="check-btn w-5 h-5 rounded border-2 border-upago-blue bg-upago-blue flex items-center justify-center flex-shrink-0 transition-all"
+                    id="chk-911999729">
+                    <i class="fa-solid fa-check text-white text-[9px]"></i>
+                  </button>
+                  <button onclick="expandCuota('911999729')" class="text-upago-blue hover:text-upago-dark transition-colors">
+                    <i class="fa-solid fa-circle-plus text-base"></i>
+                  </button>
+                </div>
+              </td>
+              <td class="py-3.5 px-4 text-xs text-gray-500 whitespace-nowrap">05/02/2024</td>
+              <td class="py-3.5 px-4 text-xs font-semibold text-upago-blue">
+                Cuota 06 – febrero 2024
+              </td>
+              <td class="py-3.5 px-4 text-xs font-bold text-upago-dark text-right whitespace-nowrap">$122.587</td>
+              <td class="py-3.5 px-4 text-xs text-gray-400 text-center">—</td>
+            </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Leyenda -->
+          <div class="flex items-center gap-4 text-xs text-gray-500">
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-sm bg-red-50 border border-red-200"></span>
+              <span>Cuotas vencidas</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-sm bg-white border border-gray-200"></span>
+              <span>Cuotas vigentes</span>
+            </div>
+          </div>
+
+          <!-- Footer certs -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs text-gray-500">
+            <div class="flex items-center gap-2"><i class="fa-solid fa-user-shield text-upago-blue"></i><span>En UPAGO resguardamos la integridad y confidencialidad de tus transacciones.</span></div>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1.5 bg-white border border-gray-200 px-2 py-1 rounded-md shadow-sm"><span class="w-2 h-2 rounded-full bg-upago-green"></span><span class="font-extrabold text-[9px] tracking-wider">ISO 27001</span></div>
+              <div class="flex items-center gap-1.5 bg-white border border-gray-200 px-2 py-1 rounded-md shadow-sm"><span class="w-2 h-2 rounded-full bg-upago-green"></span><span class="font-extrabold text-[9px] tracking-wider">PCI DSS</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel lateral Paso 1 -->
+        <div>
+          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sticky top-24 space-y-5">
+
+            <!-- Institución -->
+            <div class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
+              <div>
+                <p class="text-xs text-gray-500 font-semibold">Institución Recaudadora</p>
+                <p class="text-sm font-bold text-upago-dark mt-0.5">AIEP – Universidad Andrés Bello</p>
+                <p class="text-xs text-gray-400 mt-0.5">ID Servicio: #UP-2026-AIEP-3391</p>
+              </div>
+              <div class="bg-upago-blue/5 text-upago-blue p-2.5 rounded-xl"><i class="fa-solid fa-graduation-cap text-lg"></i></div>
+            </div>
+
+            <!-- Resumen selección dinámica -->
+            <div class="space-y-2">
+              <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Selección actual</p>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-gray-500">Cuotas seleccionadas</span>
+                <span class="font-bold text-upago-dark" id="s1-count">6 de 6</span>
+              </div>
+              <div class="flex items-center justify-between text-xs text-red-500 font-semibold">
+                <span>Cuotas vencidas incluidas</span>
+                <span id="s1-venc">4</span>
+              </div>
+            </div>
+
+            <!-- Total dinámico -->
+            <div class="border-t border-gray-100 pt-4 flex items-baseline justify-between">
+              <span class="text-sm font-bold text-upago-dark">Total a pagar:</span>
+              <div class="text-right">
+                <span class="text-2xl font-extrabold text-upago-blue" id="s1-total">$735.502</span>
+                <span class="text-xs text-gray-400 font-bold ml-1">CLP</span>
+              </div>
+            </div>
+
+            <!-- BTN PAGAR -->
+            <button onclick="goStep2()"
+              class="w-full bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-upago-blue/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              id="btn-pagar">
+              <i class="fa-solid fa-lock text-sm"></i> Pagar <i class="fa-solid fa-arrow-right-long text-sm"></i>
+            </button>
+
+            <!-- BTN CANCELAR -->
+            <button onclick="cancelOp()"
+              class="w-full border border-red-200 text-red-500 hover:bg-red-50 font-bold py-3 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm">
+              Cancelar
+            </button>
+
+            <!-- BTN SUSCRIBIR PAC -->
+            <button onclick="openPacModal()"
+              class="w-full border-2 border-upago-green text-upago-green hover:bg-upago-green hover:text-white font-bold py-3 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm">
+              <i class="fa-solid fa-rotate"></i> Suscribir a Pago Automático
+            </button>
+
+            <!-- PAGO TOTAL y PAGO TOTAL VENCIDO -->
+            <div class="grid grid-cols-2 gap-3 pt-1">
+
+              <!-- PAGO TOTAL -->
+              <div class="relative group">
+                <button onclick="applyTotal()"
+                  class="w-full bg-upago-dark hover:bg-upago-dark/90 text-white font-bold py-3 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-xs">
+                  <i class="fa-solid fa-credit-card"></i>
+                  Pago Total
+                  <i class="fa-solid fa-circle-info text-[9px] opacity-50"></i>
+                </button>
+                <div class="hidden group-hover:block absolute right-0 bottom-full mb-2 w-52 z-30">
+                  <div class="bg-upago-dark text-white text-xs rounded-xl p-3 shadow-2xl border border-white/10 leading-relaxed">
+                    <p class="font-bold text-upago-lightGreen mb-1">Pago Total</p>
+                    Selecciona todas las cuotas — vencidas y vigentes — para saldar la deuda completa de una vez.
+                  </div>
+                </div>
+              </div>
+
+              <!-- PAGO TOTAL VENCIDO -->
+              <div class="relative group">
+                <button onclick="applyVencido()"
+                  class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-xs">
+                  <i class="fa-solid fa-calendar-xmark"></i>
+                  Total Vencido
+                  <i class="fa-solid fa-circle-info text-[9px] opacity-50"></i>
+                </button>
+                <div class="hidden group-hover:block absolute right-0 bottom-full mb-2 w-52 z-30">
+                  <div class="bg-upago-dark text-white text-xs rounded-xl p-3 shadow-2xl border border-white/10 leading-relaxed">
+                    <p class="font-bold text-red-400 mb-1">Pago Total Vencido</p>
+                    Selecciona solo las cuotas atrasadas para regularizar tu cuenta y evitar penalidades.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div><!-- /screen-1 -->
+
+
+  <!-- ════════════════════════════
+       PASO 2
+  ════════════════════════════ -->
+  <div id="screen-2" class="screen flex-grow">
+    <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Selector medios de pago -->
+        <div class="lg:col-span-2 space-y-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-extrabold tracking-tight text-upago-dark">Selecciona tu medio de pago</h1>
+              <p class="text-sm text-gray-500 mt-1">Elige la opción que más te acomode para proceder con tu pago seguro.</p>
+            </div>
+            <div class="relative min-w-[240px]">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+              <input type="text" id="searchInput" oninput="filterPayment()" placeholder="Buscar banco o medio de pago..." class="w-full pl-9 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-upago-blue focus:border-transparent shadow-sm">
+            </div>
+          </div>
+
+          <!-- Banner -->
+          <div class="bg-gradient-to-r from-upago-blue to-[#5B88FC] rounded-2xl p-5 text-white shadow-md relative overflow-hidden">
+            <div class="absolute right-0 bottom-0 opacity-10 translate-x-10 translate-y-10">
+              <svg width="200" height="200" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none"/><circle cx="50" cy="50" r="25" stroke="white" stroke-width="2" fill="none"/></svg>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="p-2.5 bg-white/10 rounded-xl"><i class="fa-solid fa-shield-halved text-xl text-upago-lightGreen"></i></div>
+              <div class="space-y-1">
+                <span class="bg-upago-lightGreen text-upago-dark text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider">Asegura tu pago</span>
+                <h3 class="text-base font-bold">¿Quieres simplificar tus cobros futuros?</h3>
+                <p class="text-xs text-white/85 leading-relaxed">Activa el cargo automático (PAT/PAC). Evita multas y obtén un 65% de mejores tiempos de recuperación con UPAGO.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="flex border-b border-gray-100 bg-gray-50/50 p-1 gap-1 overflow-x-auto scrollbar-hide">
+              <button onclick="switchTab('tab-bancos')" id="btn-tab-bancos" class="tab-btn flex-1 min-w-[110px] py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-upago-blue bg-white shadow-sm border border-gray-100">
+                <i class="fa-solid fa-building-columns text-base"></i><span>Bancos</span>
+              </button>
+              <button onclick="switchTab('tab-tarjetas')" id="btn-tab-tarjetas" class="tab-btn flex-1 min-w-[110px] py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-gray-500 hover:text-upago-dark hover:bg-white/50">
+                <i class="fa-regular fa-credit-card text-base"></i><span>Tarjetas</span>
+              </button>
+              <button onclick="switchTab('tab-apps')" id="btn-tab-apps" class="tab-btn flex-1 min-w-[110px] py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-gray-500 hover:text-upago-dark hover:bg-white/50">
+                <i class="fa-solid fa-mobile-screen-button text-base"></i><span>Billeteras</span>
+              </button>
+              <button onclick="switchTab('tab-efectivo')" id="btn-tab-efectivo" class="tab-btn flex-1 min-w-[110px] py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-gray-500 hover:text-upago-dark hover:bg-white/50">
+                <i class="fa-solid fa-money-bill-transfer text-base"></i><span>Efectivo</span>
+              </button>
+            </div>
+            <div class="p-6">
+              <!-- Bancos -->
+              <div id="tab-bancos" class="tab-content block space-y-4">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Transferencia segura integrada por UPAGO</h4>
+                  <span class="text-[11px] bg-upago-blue/10 text-upago-blue font-bold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-bolt mr-1"></i>Abono Inmediato</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div onclick="selectMethod('Banco de Chile','bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-gradient-to-br from-blue-900 to-blue-700 rounded-lg flex items-center justify-center text-white font-serif font-extrabold text-xs">BCh</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Banco de Chile</p><p class="text-xs text-gray-400">Transferencia Electrónica Directa</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                  <div onclick="selectMethod('Banco Santander','bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-red-600 rounded-lg flex items-center justify-center text-white text-lg"><i class="fa-solid fa-fire-flame-curved"></i></div><div><p class="text-sm font-bold group-hover:text-upago-blue">Santander</p><p class="text-xs text-gray-400">Paga con tu clave bancaria</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                  <div onclick="selectMethod('BancoEstado','bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-gradient-to-r from-orange-500 to-blue-900 rounded-lg flex items-center justify-center text-white font-black text-xs">BE</div><div><p class="text-sm font-bold group-hover:text-upago-blue">BancoEstado / CuentaRUT</p><p class="text-xs text-gray-400">Incluye Pago con App BancoEstado</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                  <div onclick="selectMethod('Banco Itaú','bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-orange-600 rounded-lg flex items-center justify-center text-white font-extrabold text-sm">itaú</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Itaú</p><p class="text-xs text-gray-400">Acceso directo a portal de transferencias</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                  <div onclick="selectMethod('Banco BCI','bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-emerald-950 rounded-lg flex items-center justify-center text-emerald-400 font-extrabold text-[11px] border border-emerald-800">bci</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Banco BCI / MACH Bank</p><p class="text-xs text-gray-400">Paga directo desde tu App de BCI</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                  <div onclick="selectMethod('Scotiabank','bancos')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-red-700 rounded-lg flex items-center justify-center text-white font-extrabold text-lg">S</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Scotiabank</p><p class="text-xs text-gray-400">Autoriza con tu Token ScotiaKey</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- Tarjetas -->
+              <div id="tab-tarjetas" class="tab-content hidden space-y-4">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Pasarelas Autorizadas</h4>
+                  <span class="text-[11px] bg-upago-green/15 text-upago-green font-bold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-percent mr-1"></i>Cuotas Sin Interés</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div onclick="selectMethod('Webpay Plus','tarjetas')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-purple-700 rounded-lg flex items-center justify-center text-white text-xs font-bold leading-none p-1 text-center">web<br>pay</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Webpay Plus (Transbank)</p><p class="text-xs text-gray-400">Hasta 3 cuotas sin interés</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                  <div onclick="selectMethod('Webpay OneClick','tarjetas')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">1-clic</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Webpay OneClick</p><p class="text-xs text-gray-400">Vincula tu tarjeta y paga en un toque</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- Apps -->
+              <div id="tab-apps" class="tab-content hidden space-y-4">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Billeteras Móviles</h4>
+                  <span class="text-[11px] bg-amber-100 text-amber-700 font-bold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-qrcode mr-1"></i>Pago Móvil Seguro</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div onclick="selectMethod('MACH','apps')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-indigo-950 text-indigo-400 rounded-lg flex items-center justify-center font-extrabold text-xs">MACH</div><div><p class="text-sm font-bold group-hover:text-upago-blue">MACH (Bci)</p><p class="text-xs text-gray-400">Paga con saldo MACH desde tu celular</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                  <div onclick="selectMethod('Mercado Pago','apps')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-sky-500 text-white rounded-lg flex items-center justify-center font-bold text-xs">MP</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Mercado Pago</p><p class="text-xs text-gray-400">Paga de forma instantánea</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                </div>
+              </div>
+              <!-- Efectivo -->
+              <div id="tab-efectivo" class="tab-content hidden space-y-4">
+                <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                  <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Cajas autorizadas a nivel nacional</h4>
+                  <span class="text-[11px] bg-purple-100 text-purple-700 font-bold px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-store mr-1"></i>Comercio Local</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div onclick="selectMethod('Unired','efectivo')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-red-600 rounded-lg flex items-center justify-center text-white text-xs font-extrabold">unired</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Unired (Efectivo/Caja)</p><p class="text-xs text-gray-400">Paga con cupón en locales Unimarc</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                  <div onclick="selectMethod('Servipag','efectivo')" class="payment-card border border-gray-200 hover:border-upago-blue hover:shadow-md rounded-xl p-4 flex items-center justify-between cursor-pointer bg-white transition-all group">
+                    <div class="flex items-center gap-3"><div class="w-10 h-10 flex-shrink-0 bg-amber-400 rounded-lg flex items-center justify-center text-blue-900 font-extrabold text-xs">PAG</div><div><p class="text-sm font-bold group-hover:text-upago-blue">Servipag Express</p><p class="text-xs text-gray-400">Cajas presenciales y abono bancario</p></div></div>
+                    <i class="fa-solid fa-chevron-right text-xs text-gray-300 group-hover:text-upago-blue"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer certs -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100 text-xs text-gray-500">
+            <div class="flex items-center gap-2"><i class="fa-solid fa-user-shield text-upago-blue"></i><span>En UPAGO resguardamos la integridad y confidencialidad de tus transacciones.</span></div>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1.5 bg-white border border-gray-200 px-2 py-1 rounded-md shadow-sm"><span class="w-2 h-2 rounded-full bg-upago-green"></span><span class="font-extrabold text-[9px] tracking-wider">ISO 27001</span></div>
+              <div class="flex items-center gap-1.5 bg-white border border-gray-200 px-2 py-1 rounded-md shadow-sm"><span class="w-2 h-2 rounded-full bg-upago-green"></span><span class="font-extrabold text-[9px] tracking-wider">PCI DSS</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESUMEN OPERACIÓN Paso 2 -->
+        <div>
+          <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sticky top-24 space-y-5">
+            <div class="border-b border-gray-100 pb-4">
+              <h2 class="text-base font-extrabold text-upago-dark">Resumen de tu Operación</h2>
+              <p class="text-xs text-gray-400 mt-0.5">Control y transparencia en tiempo real</p>
+            </div>
+
+            <!-- Institución -->
+            <div class="bg-gray-50 rounded-2xl p-4 flex items-center justify-between border border-gray-100">
+              <div>
+                <p class="text-xs text-gray-500 font-semibold">Institución Recaudadora</p>
+                <p class="text-sm font-bold text-upago-dark mt-0.5">AIEP – Universidad Andrés Bello</p>
+                <p class="text-xs text-gray-400 mt-0.5">ID Servicio: #UP-2026-AIEP-3391</p>
+              </div>
+              <div class="bg-upago-blue/5 text-upago-blue p-2.5 rounded-xl"><i class="fa-solid fa-graduation-cap text-lg"></i></div>
+            </div>
+
+            <!-- Badge tipo operación -->
+            <div id="s2-badge" class="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2 bg-upago-blue/10 text-upago-blue">
+              <i class="fa-solid fa-list-check"></i><span id="s2-badge-label">Pago seleccionado</span>
+            </div>
+
+            <!-- Cuotas dinámicas -->
+            <div class="space-y-2 border-t border-gray-100 pt-3" id="s2-cuotas"></div>
+
+            <!-- Conteo + descuento -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-gray-500">Cuotas incluidas</span>
+                <span class="font-bold text-upago-dark" id="s2-count">—</span>
+              </div>
+              <div class="flex items-center justify-between text-xs text-upago-green font-semibold">
+                <span>Descuento Pago Temprano (UPAGO)</span><span>$0 CLP</span>
+              </div>
+            </div>
+
+            <!-- Método elegido -->
+            <div class="border-t border-gray-100 pt-4 space-y-3">
+              <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Método de pago elegido</p>
+              <div class="bg-upago-blue/5 border border-upago-blue/10 rounded-2xl p-3.5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="h-8 w-8 bg-upago-blue/15 text-upago-blue rounded-xl flex items-center justify-center text-sm font-bold" id="method-icon">
+                    <i class="fa-solid fa-building-columns"></i>
+                  </span>
+                  <div>
+                    <p class="text-xs font-semibold text-gray-500">Seleccionado</p>
+                    <p class="text-sm font-bold text-upago-dark" id="method-name">—</p>
+                  </div>
+                </div>
+                <span class="h-2.5 w-2.5 rounded-full bg-upago-green animate-pulse"></span>
+              </div>
+            </div>
+
+            <!-- Total -->
+            <div class="border-t border-gray-100 pt-4 flex items-baseline justify-between">
+              <span class="text-sm font-bold text-upago-dark">Total a pagar:</span>
+              <div class="text-right">
+                <span class="text-2xl font-extrabold text-upago-blue" id="s2-total">—</span>
+                <span class="text-xs text-gray-400 font-bold ml-1">CLP</span>
+              </div>
+            </div>
+
+            <!-- Botón Pagar -->
+            <button onclick="openPayModal()" class="w-full bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-upago-blue/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+              <span>PAGAR AHORA CON SEGURO</span>
+              <i class="fa-solid fa-arrow-right-long"></i>
+            </button>
+
+            <div class="flex items-center justify-center gap-1.5 text-[10px] text-upago-green font-extrabold uppercase tracking-wider">
+              <i class="fa-solid fa-circle-check"></i><span>Ingresos Asegurados y Conciliados en Línea</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div><!-- /screen-2 -->
+
+
+  <!-- ════════════════════════════
+       PASO 3 – COMPROBANTE
+  ════════════════════════════ -->
+  <div id="screen-3" class="screen flex-grow">
+    <div class="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center min-h-[60vh]">
+      <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 w-full text-center space-y-6 relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-2 bg-upago-green"></div>
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-upago-green/10 text-upago-green border-4 border-white shadow-md mx-auto">
+          <i class="fa-solid fa-circle-check text-4xl"></i>
+        </div>
+        <div class="space-y-1">
+          <h2 class="text-2xl font-extrabold text-upago-dark">¡Recaudación Exitosa!</h2>
+          <p class="text-sm text-upago-green font-bold">Comprobante de pago procesado y conciliado al instante</p>
+        </div>
+        <div class="border border-dashed border-gray-200 rounded-2xl p-6 bg-gray-50 text-left space-y-4">
+          <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Código de Operación</p>
+            <p class="text-sm font-mono font-bold text-upago-dark">UP-TX-839281-2026</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4 text-xs">
+            <div><p class="text-gray-400 font-medium">Razón Social</p><p class="font-bold text-upago-dark mt-0.5">JANUS SpA (UPAGO)</p></div>
+            <div><p class="text-gray-400 font-medium">Institución Recaudada</p><p class="font-bold text-upago-dark mt-0.5">AIEP – U. Andrés Bello</p></div>
+            <div><p class="text-gray-400 font-medium">Contribuyente / Alumno</p><p class="font-bold text-upago-dark mt-0.5" id="r-name">Juan Marcelo Osorio Silva</p></div>
+            <div><p class="text-gray-400 font-medium">Medio de Pago</p><p class="font-bold text-upago-dark mt-0.5" id="r-method">—</p></div>
+            <div><p class="text-gray-400 font-medium">Fecha y Hora</p><p class="font-bold text-upago-dark mt-0.5" id="r-date">—</p></div>
+            <div><p class="text-gray-400 font-medium">Conciliación</p><p class="font-bold text-upago-green mt-0.5 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-upago-green"></span> 100% Conciliado</p></div>
+          </div>
+          <div class="border-t border-gray-100 pt-3 flex items-baseline justify-between">
+            <span class="text-sm font-bold text-upago-dark">Monto Recaudado:</span>
+            <span class="text-xl font-extrabold text-upago-blue" id="r-amount">—</span>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+          <button onclick="dlReceipt()" class="w-full sm:w-auto bg-upago-dark hover:bg-upago-dark/95 text-white font-extrabold py-3 px-6 rounded-xl text-xs tracking-wider transition-all shadow-md flex items-center justify-center gap-2">
+            <i class="fa-solid fa-file-pdf"></i> Descargar Comprobante PDF
+          </button>
+          <button onclick="copyCode()" class="w-full sm:w-auto border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold py-3 px-6 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+            <i class="fa-regular fa-copy"></i> Copiar Código
+          </button>
+          <button onclick="location.reload()" class="w-full sm:w-auto bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-3 px-6 rounded-xl text-xs tracking-wider transition-all flex items-center justify-center gap-2">
+            Volver a Pagar <i class="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /screen-3 -->
+
+  <!-- FOOTER -->
+  <footer class="bg-upago-dark text-white/70 py-8 border-t border-white/10 mt-12 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-1 text-center md:text-left">
+        <span class="font-extrabold text-white text-sm tracking-wide block">UPAGO</span>
+        <p class="text-white/50">Plataforma fintech líder en automatización de cobros en LATAM.</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-4 text-[11px] font-bold text-white/90">
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-upago-blue"></span> Chile (Santiago)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-upago-green"></span> México (CDMX)</div>
+        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-upago-lightBlue"></span> Colombia (Bogotá)</div>
+      </div>
+      <div class="text-center md:text-right text-white/40">
+        <p>© 2026 UPAGO. Todos los derechos reservados.</p>
+        <p class="mt-1">Fundada en 2019 • Felipe Pastenes y Jorge Pizarro.</p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /flex-1 -->
+</div><!-- /min-h-screen flex -->
+
+
+<!-- ════════════ MODAL PAC ════════════ -->
+<div id="modal-pac" class="fixed inset-0 bg-upago-dark/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden">
+  <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-gray-100 overflow-hidden transform scale-95 transition-all" id="pac-container">
+
+    <!-- Header modal PAC -->
+    <div class="bg-upago-dark text-white p-6 relative">
+      <button onclick="closePacModal()" class="absolute right-5 top-5 text-white/60 hover:text-white text-lg transition-colors">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="flex items-center gap-3">
+        <div class="bg-white/10 p-2.5 rounded-xl text-upago-lightGreen"><i class="fa-solid fa-rotate text-base"></i></div>
+        <div>
+          <p class="text-xs text-white/60 font-semibold">AIEP – Universidad Andrés Bello</p>
+          <h3 class="text-base font-extrabold text-white">Suscripción a Pago Automático de Cuentas</h3>
+        </div>
+      </div>
     </div>
 
-    <!-- MODAL DE PROCESAMIENTO DE PAGO -->
-    <div id="payment-modal" class="fixed inset-0 bg-upago-dark/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-gray-100 overflow-hidden transform scale-95 transition-all" id="modal-container">
-            <div class="bg-upago-dark text-white p-6 relative">
-                <button onclick="closeModal()" class="absolute right-6 top-6 text-white/60 hover:text-white transition-colors text-lg">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-                <div class="flex items-center space-x-3">
-                    <div class="bg-white/10 p-2 rounded-xl text-upago-lightGreen">
-                        <i class="fa-solid fa-lock text-base"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm text-white/70 font-semibold">Simulando Portal de Pago</h3>
-                        <p class="text-base font-extrabold text-white" id="modal-payment-title">Webpay Plus</p>
-                    </div>
-                </div>
-            </div>
+    <div class="p-6 space-y-5">
+      <p class="text-sm text-gray-500 leading-relaxed">Suscribe a Pago Automático de Cuentas de AIEP y olvídate de hacer tus pagos de manera manual.</p>
 
-            <div class="p-6 space-y-6">
-                <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-gray-400">Total a Autorizar</p>
-                        <p class="text-lg font-black text-upago-dark">$100.000 CLP</p>
-                    </div>
-                    <span class="text-[11px] bg-upago-blue/15 text-upago-blue font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-shield"></i> Servidor Seguro</span>
-                </div>
-
-                <div class="space-y-4" id="modal-form-inputs">
-                    <!-- Dinámico por JS -->
-                </div>
-
-                <div class="grid grid-cols-2 gap-3 pt-2">
-                    <button onclick="simulateSuccess()" class="bg-upago-green hover:bg-upago-green/90 text-white font-extrabold py-3 px-4 rounded-xl text-xs tracking-wide transition-all shadow-md flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-circle-check"></i> Autorizar Pago
-                    </button>
-                    <button onclick="closeModal()" class="border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold py-3 px-4 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-circle-minus"></i> Cancelar
-                    </button>
-                </div>
-            </div>
-
-            <div class="bg-gray-50 py-3.5 px-6 border-t border-gray-100 text-center text-[10px] text-gray-400 font-medium">
-                Conectado con tecnología de conciliación automatizada en 1 min.
-            </div>
+      <div class="border-t border-gray-100 pt-4">
+        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Para continuar, revisa tus datos informados por AIEP:</p>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-500 mb-1.5">Nombre</label>
+            <input type="text" value="JUAN MARCELO" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-upago-dark font-medium focus:outline-none focus:ring-2 focus:ring-upago-blue bg-gray-50">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-500 mb-1.5">Apellido</label>
+            <input type="text" value="OSORIO SILVA" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-upago-dark font-medium focus:outline-none focus:ring-2 focus:ring-upago-blue bg-gray-50">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-500 mb-1.5">Email</label>
+            <input type="email" value="JUAN.OSORIOS@correoaiep.cl" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-upago-dark font-medium focus:outline-none focus:ring-2 focus:ring-upago-blue bg-gray-50">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-500 mb-1.5">Rut (con guión)</label>
+            <input type="text" value="20966649-9" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-upago-dark font-medium focus:outline-none focus:ring-2 focus:ring-upago-blue bg-gray-50">
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- DIÁLOGO INTERACTIVO ESTILIZADO (Reemplazo Premium de alert() y confirm()) -->
-    <div id="custom-dialog" class="fixed inset-0 bg-upago-dark/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 text-center space-y-4 transform transition-all">
-            <div class="w-12 h-12 bg-upago-blue/10 text-upago-blue rounded-full flex items-center justify-center mx-auto text-xl">
-                <i id="dialog-icon" class="fa-solid fa-circle-info text-upago-blue"></i>
+      <!-- Elección vía de cargo -->
+      <div class="border-t border-gray-100 pt-4 space-y-3">
+        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Elige la vía de cargo automático:</p>
+
+        <!-- Opción 1: Cuenta Bancaria -->
+        <label class="flex items-center gap-4 border border-gray-200 rounded-2xl p-4 cursor-pointer hover:border-upago-blue transition-all group" id="pac-opt-bank">
+          <div class="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0 pac-radio" onclick="selectPacMethod('bank')">
+            <span class="w-2.5 h-2.5 rounded-full bg-upago-blue opacity-0 pac-dot-bank"></span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-bold text-upago-dark">Cargo con Cuenta Bancaria</p>
+            <p class="text-xs text-gray-400">(vía Firma Electrónica)</p>
+          </div>
+          <div class="text-right">
+            <p class="text-[10px] text-gray-400 font-semibold mb-1">Activación en 24 hrs.:</p>
+            <div class="flex items-center gap-1 flex-wrap justify-end">
+              <div class="w-6 h-6 bg-blue-800 rounded text-white text-[8px] font-black flex items-center justify-center">BS</div>
+              <div class="w-6 h-6 bg-orange-600 rounded text-white text-[8px] font-black flex items-center justify-center">itaú</div>
+              <div class="w-6 h-6 bg-red-600 rounded text-white text-[8px] font-black flex items-center justify-center">S</div>
+              <div class="w-6 h-6 bg-gradient-to-r from-orange-500 to-blue-900 rounded text-white text-[8px] font-black flex items-center justify-center">BE</div>
+              <div class="w-6 h-6 bg-gradient-to-br from-blue-900 to-blue-700 rounded text-white text-[8px] font-black flex items-center justify-center">BCh</div>
             </div>
-            <h3 id="dialog-title" class="text-lg font-extrabold text-upago-dark">Notificación</h3>
-            <p id="dialog-message" class="text-sm text-gray-500 leading-relaxed"></p>
-            <div class="flex gap-3 pt-2" id="dialog-buttons">
-                <!-- Botones Inyectados Dinámicamente -->
-            </div>
+          </div>
+        </label>
+
+        <!-- Opción 2: Tarjeta de Crédito -->
+        <label class="flex items-center gap-4 border border-gray-200 rounded-2xl p-4 cursor-pointer hover:border-upago-blue transition-all group" id="pac-opt-card">
+          <div class="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0 pac-radio" onclick="selectPacMethod('card')">
+            <span class="w-2.5 h-2.5 rounded-full bg-upago-blue opacity-0 pac-dot-card"></span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-bold text-upago-dark">Cargo con Tarjeta de Crédito</p>
+          </div>
+          <div class="bg-purple-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg">webpay<br>one·click</div>
+        </label>
+      </div>
+
+      <p class="text-xs text-gray-400 text-center">(*) Al continuar aceptas nuestros <a href="#" class="text-upago-blue font-semibold hover:underline">Términos y Condiciones</a></p>
+
+      <!-- Acciones -->
+      <div class="grid grid-cols-2 gap-3 pt-1">
+        <button id="btn-pac-confirm" onclick="confirmPac()"
+          class="bg-upago-blue/30 text-upago-blue/50 font-extrabold py-3 px-4 rounded-2xl text-sm transition-all flex items-center justify-center gap-2 cursor-not-allowed"
+          disabled>
+          Ir a Autorizar Medio de Pago
+        </button>
+        <button onclick="closePacModal()"
+          class="border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold py-3 px-4 rounded-2xl text-sm transition-all flex items-center justify-center">
+          Salir
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /modal-pac -->
+
+
+<!-- ════════════ MODAL PAGO FINAL ════════════ -->
+<div id="modal-pay" class="fixed inset-0 bg-upago-dark/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden">
+  <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-gray-100 overflow-hidden transform scale-95 transition-all" id="pay-container">
+    <div class="bg-upago-dark text-white p-6 relative">
+      <button onclick="closePayModal()" class="absolute right-5 top-5 text-white/60 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      <div class="flex items-center gap-3">
+        <div class="bg-white/10 p-2 rounded-xl text-upago-lightGreen"><i class="fa-solid fa-lock text-base"></i></div>
+        <div>
+          <h3 class="text-sm text-white/70 font-semibold">Simulando Portal de Pago</h3>
+          <p class="text-base font-extrabold text-white" id="pay-title">—</p>
         </div>
+      </div>
     </div>
+    <div class="p-6 space-y-6">
+      <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex items-center justify-between">
+        <div>
+          <p class="text-xs text-gray-400">Total a Autorizar</p>
+          <p class="text-lg font-black text-upago-dark" id="pay-total">—</p>
+        </div>
+        <span class="text-[11px] bg-upago-blue/15 text-upago-blue font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-shield"></i> Servidor Seguro</span>
+      </div>
+      <div id="pay-form"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="simulateSuccess()" class="bg-upago-green hover:bg-upago-green/90 text-white font-extrabold py-3 px-4 rounded-xl text-xs tracking-wide transition-all shadow-md flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-circle-check"></i> Autorizar Pago
+        </button>
+        <button onclick="closePayModal()" class="border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-circle-minus"></i> Cancelar
+        </button>
+      </div>
+    </div>
+    <div class="bg-gray-50 py-3.5 px-6 border-t border-gray-100 text-center text-[10px] text-gray-400 font-medium">
+      Conectado con tecnología de conciliación automatizada en 1 min.
+    </div>
+  </div>
+</div><!-- /modal-pay -->
 
-    <script>
-        // Objeto global de estado del pago
-        let paymentState = {
-            selectedMethod: "Banco de Chile",
-            selectedTab: "bancos",
-            userName: "Marco Betancourt",
-            totalAmount: 100000,
-            currency: "CLP",
-            isSuccessful: false
-        };
 
-        // Control de apertura/cierre del Sidebar en móviles
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const backdrop = document.getElementById('sidebar-backdrop');
-            sidebar.classList.toggle('-translate-x-full');
-            backdrop.classList.toggle('hidden');
-        }
+<!-- ════════════ DIÁLOGO CUSTOM ════════════ -->
+<div id="dlg" class="fixed inset-0 bg-upago-dark/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 hidden">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 text-center space-y-4">
+    <div class="w-12 h-12 bg-upago-blue/10 rounded-full flex items-center justify-center mx-auto text-xl">
+      <i id="dlg-icon" class="fa-solid fa-circle-info text-upago-blue"></i>
+    </div>
+    <h3 id="dlg-title" class="text-lg font-extrabold text-upago-dark"></h3>
+    <p id="dlg-msg" class="text-sm text-gray-500 leading-relaxed"></p>
+    <div id="dlg-btns" class="flex gap-3 pt-2"></div>
+  </div>
+</div>
 
-        // Alertas visuales para las funciones informativas del menú lateral
-        function showFeatureAlert(featureName) {
-            showCustomAlert(
-                featureName,
-                `Estás ingresando al portal preventivo de UPAGO. La función de "${featureName}" se encuentra totalmente sincronizada con tu cuenta Movistar actual.`,
-                "fa-solid fa-shield text-upago-green"
-            );
-        }
 
-        // Sistema dinámico de Diálogos Estilizados (Evita alertas del navegador nativas)
-        function showCustomAlert(title, message, iconClass = 'fa-solid fa-circle-info text-upago-blue', buttonText = 'Aceptar') {
-            const dialog = document.getElementById('custom-dialog');
-            document.getElementById('dialog-title').innerText = title;
-            document.getElementById('dialog-message').innerText = message;
-            document.getElementById('dialog-icon').className = iconClass;
-            
-            const btnContainer = document.getElementById('dialog-buttons');
-            btnContainer.innerHTML = `
-                <button onclick="closeCustomDialog()" class="flex-1 bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-3 px-4 rounded-xl text-xs transition-all shadow-md">
-                    ${buttonText}
-                </button>
-            `;
-            dialog.classList.remove('hidden');
-        }
+<script>
+// ═══ DATOS ═══
+const CUOTAS = [
+  {id:"6983203-01",monto:122583,vencida:true,label:"Cuota 01 – marzo 2023"},
+  {id:"7073053-02",monto:122583,vencida:true,label:"Cuota 02 – abril 2023"},
+  {id:"7161368-03",monto:122583,vencida:true,label:"Cuota 03 – mayo 2023"},
+  {id:"7312390-04",monto:122583,vencida:true,label:"Cuota 04 – junio 2023"},
+  {id:"912009740",monto:122583,vencida:false,label:"Cuota 05 – enero 2024"},
+  {id:"911999729",monto:122587,vencida:false,label:"Cuota 06 – febrero 2024"},
+];
+const TOTAL_ALL  = 735502;
+const TOTAL_VENC = 490332;
 
-        function showCustomConfirm(title, message, onConfirmAction, iconClass = 'fa-solid fa-triangle-exclamation text-red-500') {
-            const dialog = document.getElementById('custom-dialog');
-            document.getElementById('dialog-title').innerText = title;
-            document.getElementById('dialog-message').innerText = message;
-            document.getElementById('dialog-icon').className = iconClass;
-            
-            const btnContainer = document.getElementById('dialog-buttons');
-            btnContainer.innerHTML = `
-                <button onclick="closeCustomDialog(); ${onConfirmAction}" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-extrabold py-3 px-4 rounded-xl text-xs transition-all shadow-md">
-                    Sí, cancelar
-                </button>
-                <button onclick="closeCustomDialog()" class="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold py-3 px-4 rounded-xl text-xs transition-all">
-                    No, volver
-                </button>
-            `;
-            dialog.classList.remove('hidden');
-        }
+// ═══ ESTADO ═══
+let st = {
+  selected: new Set(CUOTAS.map(c => c.id)),
+  method: null,
+  tab: 'bancos',
+  opType: 'manual',
+  total: TOTAL_ALL
+};
 
-        function closeCustomDialog() {
-            document.getElementById('custom-dialog').classList.add('hidden');
-        }
+let pacMethod = null;
 
-        // Cambiar entre Pestañas de manera animada y limpia
-        function switchTab(tabId) {
-            paymentState.selectedTab = tabId;
+// ═══ UTILIDADES ═══
+function fmtCLP(n) { return '$' + Math.round(n).toLocaleString('es-CL'); }
 
-            // Ocultar todos los contenidos de pestañas
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-                content.classList.remove('block');
-            });
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('-translate-x-full');
+  document.getElementById('sidebar-backdrop').classList.toggle('hidden');
+}
 
-            // Mostrar el contenido activo
-            const activeTab = document.getElementById(tabId);
-            if (activeTab) {
-                activeTab.classList.remove('hidden');
-                activeTab.classList.add('block');
-            }
+function showAlert(title, msg='', icon='fa-solid fa-circle-info text-upago-blue') {
+  document.getElementById('dlg-title').innerText = title;
+  document.getElementById('dlg-msg').innerText = msg;
+  document.getElementById('dlg-icon').className = icon;
+  document.getElementById('dlg-btns').innerHTML =
+    `<button onclick="closeDlg()" class="flex-1 bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-3 px-4 rounded-xl text-xs transition-all shadow-md">Aceptar</button>`;
+  document.getElementById('dlg').classList.remove('hidden');
+}
 
-            // Quitar el estilo "Activo" a todos los botones de pestañas
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.className = "tab-btn flex-1 min-w-[120px] py-3 px-3 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-gray-500 hover:text-upago-dark hover:bg-white/50";
-            });
+function showConfirm(title, msg, onYes) {
+  document.getElementById('dlg-title').innerText = title;
+  document.getElementById('dlg-msg').innerText = msg;
+  document.getElementById('dlg-icon').className = 'fa-solid fa-triangle-exclamation text-red-500';
+  document.getElementById('dlg-btns').innerHTML = `
+    <button onclick="closeDlg();${onYes}" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-extrabold py-3 px-4 rounded-xl text-xs transition-all shadow-md">Sí, cancelar</button>
+    <button onclick="closeDlg()" class="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold py-3 px-4 rounded-xl text-xs">No, volver</button>`;
+  document.getElementById('dlg').classList.remove('hidden');
+}
 
-            // Dar estilo activo al botón actual (Colores de marca UPAGO)
-            const activeBtn = document.getElementById(`btn-${tabId}`);
-            if (activeBtn) {
-                activeBtn.className = "tab-btn flex-1 min-w-[120px] py-3 px-3 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-upago-blue bg-white shadow-sm border border-gray-100";
-            }
-        }
+function closeDlg() { document.getElementById('dlg').classList.add('hidden'); }
 
-        // Selección de un método de pago de las grillas
-        function selectPaymentMethod(methodName, tabType) {
-            paymentState.selectedMethod = methodName;
-            
-            // Actualizar resumen en la barra de la derecha
-            document.getElementById('selected-method-name').innerText = methodName;
-            
-            // Cambiar íconos sutiles en el badge según la categoría
-            const iconPlaceholder = document.getElementById('method-icon-placeholder');
-            if (tabType === 'bancos') {
-                iconPlaceholder.innerHTML = `<i class="fa-solid fa-building-columns"></i>`;
-                iconPlaceholder.className = "h-8 w-8 bg-upago-blue/15 text-upago-blue rounded-xl flex items-center justify-center text-sm font-bold";
-            } else if (tabType === 'tarjetas') {
-                iconPlaceholder.innerHTML = `<i class="fa-regular fa-credit-card"></i>`;
-                iconPlaceholder.className = "h-8 w-8 bg-upago-green/15 text-upago-green rounded-xl flex items-center justify-center text-sm font-bold";
-            } else if (tabType === 'apps') {
-                iconPlaceholder.innerHTML = `<i class="fa-solid fa-mobile-screen-button"></i>`;
-                iconPlaceholder.className = "h-8 w-8 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center text-sm font-bold";
-            } else {
-                iconPlaceholder.innerHTML = `<i class="fa-solid fa-store"></i>`;
-                iconPlaceholder.className = "h-8 w-8 bg-purple-100 text-purple-700 rounded-xl flex items-center justify-center text-sm font-bold";
-            }
+function cancelOp() {
+  showConfirm('¿Cancelar Operación?',
+    '¿Estás seguro que deseas cancelar esta operación? Las cuentas volverán a su estado pendiente.',
+    'location.reload()');
+}
 
-            // Efecto visual de feedback rápido de selección en la tarjeta clickeada
-            const cards = document.querySelectorAll('.payment-card');
-            cards.forEach(card => {
-                card.classList.remove('border-upago-blue', 'bg-upago-blue/5');
-            });
-            
-            // Añadir animación sutil al presionar
-            event.currentTarget.classList.add('border-upago-blue', 'bg-upago-blue/5');
-        }
+// ═══ PASO 1: GESTIÓN CHECKBOXES ═══
+function renderChecks() {
+  CUOTAS.forEach(c => {
+    const btn = document.getElementById('chk-' + c.id);
+    if (!btn) return;
+    if (st.selected.has(c.id)) {
+      btn.classList.add('bg-upago-blue','border-upago-blue');
+      btn.classList.remove('bg-white','border-gray-300');
+      btn.innerHTML = '<i class="fa-solid fa-check text-white text-[9px]"></i>';
+    } else {
+      btn.classList.remove('bg-upago-blue','border-upago-blue');
+      btn.classList.add('bg-white','border-gray-300');
+      btn.innerHTML = '';
+    }
+  });
+  // Check all
+  const allBtn = document.getElementById('chk-all');
+  const allIcon = document.getElementById('chk-all-icon');
+  if (st.selected.size === CUOTAS.length) {
+    allBtn.classList.add('bg-upago-blue','border-upago-blue'); allBtn.classList.remove('bg-white');
+    allIcon.className = 'fa-solid fa-check text-white text-[9px]';
+  } else if (st.selected.size === 0) {
+    allBtn.classList.remove('bg-upago-blue','border-upago-blue'); allBtn.classList.add('bg-white');
+    allIcon.className = '';
+  } else {
+    allBtn.classList.add('bg-upago-blue','border-upago-blue'); allBtn.classList.remove('bg-white');
+    allIcon.className = 'fa-solid fa-minus text-white text-[9px]';
+  }
+  recalcS1();
+}
 
-        // Buscador reactivo en tiempo real
-        function filterPaymentMethods() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.payment-card');
+function recalcS1() {
+  const sel = CUOTAS.filter(c => st.selected.has(c.id));
+  const total = sel.reduce((s,c) => s+c.monto, 0);
+  const nVenc = sel.filter(c => c.vencida).length;
+  st.total = total;
 
-            cards.forEach(card => {
-                const title = card.querySelector('p').innerText.toLowerCase();
-                const desc = card.querySelectorAll('p')[1].innerText.toLowerCase();
-                
-                if (title.includes(query) || desc.includes(query)) {
-                    card.style.display = "flex";
-                } else {
-                    card.style.display = "none";
-                }
-            });
+  document.getElementById('s1-count').innerText = sel.length + ' de ' + CUOTAS.length;
+  document.getElementById('s1-venc').innerText = nVenc;
+  document.getElementById('s1-total').innerText = total > 0 ? fmtCLP(total) : '—';
 
-            // Si hay búsqueda activa, expandir visualmente para que el usuario no se pierda entre pestañas
-            if (query.length > 0) {
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('hidden');
-                    content.classList.add('block');
-                });
-            } else {
-                // Restaurar la pestaña seleccionada originalmente
-                switchTab(paymentState.selectedTab);
-            }
-        }
+  const btn = document.getElementById('btn-pagar');
+  btn.disabled = total === 0;
+  btn.classList.toggle('opacity-40', total === 0);
+  btn.classList.toggle('cursor-not-allowed', total === 0);
+}
 
-        // Cancelación de operación con simulación de advertencia integrada y amigable
-        function cancelOperation() {
-            showCustomConfirm(
-                "¿Cancelar Operación?",
-                "¿Estás seguro que deseas cancelar esta operación de pago? Tus cuentas de Movistar volverán a su estado pendiente de cobro.",
-                "confirmCancel()"
-            );
-        }
+function toggleCuota(id, monto) {
+  if (st.selected.has(id)) st.selected.delete(id);
+  else st.selected.add(id);
+  st.opType = 'manual';
+  renderChecks();
+}
 
-        function confirmCancel() {
-            showCustomAlert(
-                "Operación Cancelada",
-                "Has cancelado el proceso de pago seguro. Volviendo a cargar el portal...",
-                "fa-solid fa-circle-xmark text-red-500",
-                "Entendido"
-            );
-            setTimeout(() => {
-                location.reload();
-            }, 2500);
-        }
+function toggleAll() {
+  if (st.selected.size === CUOTAS.length) st.selected.clear();
+  else CUOTAS.forEach(c => st.selected.add(c.id));
+  st.opType = 'manual';
+  renderChecks();
+}
 
-        // Trigger del procesamiento de pago (Abre modal interactivo)
-        function triggerPaymentProcessing() {
-            const modal = document.getElementById('payment-modal');
-            const container = document.getElementById('modal-container');
-            const title = document.getElementById('modal-payment-title');
-            const formInputs = document.getElementById('modal-form-inputs');
+function expandCuota(id) {
+  const c = CUOTAS.find(x => x.id === id);
+  if (c) showAlert('Detalle: ' + c.label,
+    'ID: ' + c.id + '\nMonto: ' + fmtCLP(c.monto) + ' CLP\n' + (c.vencida ? '⚠️ Cuota vencida.' : '✓ Cuota vigente.'),
+    'fa-solid fa-receipt text-upago-blue');
+}
 
-            title.innerText = paymentState.selectedMethod;
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                container.classList.remove('scale-95');
-                container.classList.add('scale-100');
-            }, 50);
+// ═══ PAGO TOTAL / TOTAL VENCIDO (solo seleccionan — NO navegan) ═══
+function applyTotal() {
+  st.opType = 'total';
+  CUOTAS.forEach(c => st.selected.add(c.id));
+  renderChecks();
+  // Feedback visual sutil
+  flashMsg('✓ Todas las cuotas seleccionadas');
+}
 
-            // Cargar inputs interactivos del modal dependiendo del método de pago
-            if (paymentState.selectedTab === 'bancos') {
-                formInputs.innerHTML = `
-                    <div class="space-y-3">
-                        <label class="block text-xs font-bold text-gray-500 uppercase">Selecciona tu tipo de cuenta bancaria</label>
-                        <select class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-upago-blue outline-none bg-white">
-                            <option>Cuenta Corriente</option>
-                            <option>Cuenta Vista / CuentaRUT</option>
-                            <option>Cuenta de Ahorros</option>
-                        </select>
-                        <p class="text-[11px] text-gray-400"><i class="fa-solid fa-circle-info text-upago-blue"></i> Serás redirigido a la interfaz oficial de tu banco mediante nuestro robot de conciliación inmediata.</p>
-                    </div>
-                `;
-            } else if (paymentState.selectedTab === 'tarjetas') {
-                formInputs.innerHTML = `
-                    <div class="space-y-3">
-                        <label class="block text-xs font-bold text-gray-500 uppercase">Número de Tarjeta</label>
-                        <input type="text" placeholder="•••• •••• •••• ••••" class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-upago-blue outline-none font-mono">
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Vence</label>
-                                <input type="text" placeholder="MM/AA" class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-upago-blue outline-none font-mono">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-gray-400 uppercase mb-1">CVV / CVC</label>
-                                <input type="password" placeholder="•••" class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-upago-blue outline-none font-mono">
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                formInputs.innerHTML = `
-                    <div class="space-y-3 text-center py-2">
-                        <p class="text-sm font-semibold text-gray-600">Confirma tu correo electrónico de contacto para envío de comprobante tokenizado:</p>
-                        <input type="email" value="marco.betancourt@gmail.com" class="w-full p-3 border border-gray-200 rounded-xl text-sm text-center focus:ring-2 focus:ring-upago-blue outline-none font-medium bg-white">
-                        <span class="text-[11px] text-upago-green font-bold bg-upago-green/10 px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-shield"></i> Protección antifraude activada</span>
-                    </div>
-                `;
-            }
-        }
+function applyVencido() {
+  st.opType = 'vencido';
+  st.selected.clear();
+  CUOTAS.filter(c => c.vencida).forEach(c => st.selected.add(c.id));
+  renderChecks();
+  flashMsg('✓ Solo cuotas vencidas seleccionadas');
+}
 
-        // Cerrar modal de pago
-        function closeModal() {
-            const modal = document.getElementById('payment-modal');
-            const container = document.getElementById('modal-container');
-            
-            container.classList.remove('scale-100');
-            container.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 150);
-        }
+function flashMsg(txt) {
+  const el = document.createElement('div');
+  el.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-upago-dark text-white text-xs font-bold px-5 py-3 rounded-2xl shadow-2xl z-50 transition-all';
+  el.innerText = txt;
+  document.body.appendChild(el);
+  setTimeout(() => el.style.opacity = '0', 1800);
+  setTimeout(() => el.remove(), 2200);
+}
 
-        // Simulación de éxito de pago -> Transición al paso 3 (Comprobante)
-        function simulateSuccess() {
-            closeModal();
-            paymentState.isSuccessful = true;
+// ═══ NAVEGAR AL PASO 2 (solo desde botón PAGAR) ═══
+function goStep2() {
+  if (st.selected.size === 0) {
+    showAlert('Sin cuotas', 'Selecciona al menos una cuota para continuar.', 'fa-solid fa-triangle-exclamation text-amber-500');
+    return;
+  }
+  populateS2();
+  // Barra de pasos
+  setStepDone(1); setStepActive(2);
+  showScreen('screen-2');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
 
-            // Ocultar sección de selección de pago y resumen
-            document.getElementById('left-column-payment').classList.add('hidden');
-            
-            // Reestructurar la grilla para mostrar el comprobante de forma limpia y expansiva
-            const gridContainer = document.querySelector('main > div');
-            gridContainer.classList.remove('grid-cols-1', 'lg:grid-cols-3');
-            gridContainer.innerHTML = ''; // Limpiar grilla para inyectar comprobante
-            
-            // Inyectar el bloque de comprobante
-            const receipt = document.getElementById('receipt-screen');
-            receipt.classList.remove('hidden');
-            gridContainer.appendChild(receipt);
+function populateS2() {
+  const sel = CUOTAS.filter(c => st.selected.has(c.id));
+  const total = sel.reduce((s,c) => s+c.monto, 0);
+  st.total = total;
 
-            // Rellenar dinámicamente datos de recibo
-            document.getElementById('receiptMethodName').innerText = paymentState.selectedMethod;
-            document.getElementById('receiptUserName').innerText = paymentState.userName;
-            
-            // Generar fecha actual de simulación en 2026
-            const now = new Date();
-            const formattedDate = now.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) + `, ${now.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'})}`;
-            document.getElementById('receiptDateTime').innerText = formattedDate;
+  // Badge tipo operación
+  const badge = document.getElementById('s2-badge');
+  const label = document.getElementById('s2-badge-label');
+  const types = {
+    total:   ['bg-upago-blue/10 text-upago-blue',  'fa-credit-card',    'Pago Total — Todas las cuotas'],
+    vencido: ['bg-red-50 text-red-600',             'fa-calendar-xmark', 'Pago Total Vencido — Deuda atrasada'],
+    manual:  ['bg-gray-100 text-gray-600',          'fa-list-check',     'Pago seleccionado manualmente'],
+  };
+  const [cls, icon, lbl] = types[st.opType] || types.manual;
+  badge.className = 'rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2 ' + cls;
+  badge.innerHTML = `<i class="fa-solid ${icon}"></i><span>${lbl}</span>`;
 
-            // Actualizar barra de pasos superior a completado
-            const stepPaymentNav = document.getElementById('step-payment-nav');
-            const stepPaymentBadge = document.getElementById('step-payment-badge');
-            const stepReceiptNav = document.getElementById('step-receipt-nav');
-            const stepReceiptBadge = document.getElementById('step-receipt-badge');
-            const stepReceiptLabel = document.getElementById('step-receipt-label');
+  // Lista cuotas
+  const list = document.getElementById('s2-cuotas');
+  const maxShow = 4;
+  let html = '';
+  sel.slice(0, maxShow).forEach(c => {
+    html += `<div class="flex items-center justify-between text-xs py-1">
+      <span class="text-gray-500 truncate max-w-[160px]">${c.label}</span>
+      <span class="font-semibold text-upago-dark ml-2">${fmtCLP(c.monto)}</span>
+    </div>`;
+  });
+  if (sel.length > maxShow) html += `<p class="text-[10px] text-gray-400 font-semibold pt-1">+ ${sel.length - maxShow} cuotas más...</p>`;
+  list.innerHTML = html;
 
-            // Paso 2: Cambiar a éxito
-            stepPaymentNav.className = "flex items-center text-upago-green opacity-80";
-            stepPaymentBadge.className = "h-7 w-7 rounded-full bg-upago-green/15 flex items-center justify-center font-bold text-xs border border-upago-green/30";
-            stepPaymentBadge.innerHTML = `<i class="fa-solid fa-check"></i>`;
+  document.getElementById('s2-count').innerText = sel.length;
+  document.getElementById('s2-total').innerText = fmtCLP(total);
+}
 
-            // Paso 3: Activo
-            stepReceiptNav.className = "flex items-center text-upago-blue font-bold";
-            stepReceiptBadge.className = "h-7 w-7 rounded-full bg-upago-blue text-white flex items-center justify-center font-bold text-xs";
-            stepReceiptLabel.className = "ml-2 text-xs font-bold";
+// ═══ MODAL PAC ═══
+function openPacModal() {
+  pacMethod = null;
+  document.getElementById('modal-pac').classList.remove('hidden');
+  setTimeout(() => document.getElementById('pac-container').classList.replace('scale-95','scale-100'), 50);
+}
 
-            // Scroll top suave
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+function closePacModal() {
+  document.getElementById('pac-container').classList.replace('scale-100','scale-95');
+  setTimeout(() => document.getElementById('modal-pac').classList.add('hidden'), 150);
+}
 
-        // Copiar código de operación al portapapeles
-        function copyReceiptCode() {
-            const el = document.createElement('textarea');
-            el.value = 'UP-TX-839281-2026';
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            
-            // Feedback del botón al copiar
-            const btn = event.currentTarget;
-            const origHTML = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-clipboard-check text-upago-green"></i> ¡Copiado!`;
-            setTimeout(() => {
-                btn.innerHTML = origHTML;
-            }, 2000);
-        }
+function selectPacMethod(m) {
+  pacMethod = m;
+  // Reset visual
+  ['bank','card'].forEach(opt => {
+    const dot = document.querySelector('.pac-dot-' + opt);
+    const label = document.getElementById('pac-opt-' + opt);
+    if (dot) dot.style.opacity = '0';
+    if (label) label.classList.remove('border-upago-blue','bg-upago-blue/5');
+  });
+  // Activar seleccionado
+  const dot = document.querySelector('.pac-dot-' + m);
+  const label = document.getElementById('pac-opt-' + m);
+  if (dot) dot.style.opacity = '1';
+  if (label) label.classList.add('border-upago-blue','bg-upago-blue/5');
+  // Habilitar botón confirmar
+  const btn = document.getElementById('btn-pac-confirm');
+  btn.disabled = false;
+  btn.className = 'bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-3 px-4 rounded-2xl text-sm transition-all flex items-center justify-center gap-2 shadow-md';
+}
 
-        // Descarga simulada con modal estilizado de UPAGO
-        function downloadReceipt() {
-            showCustomAlert(
-                "Preparando Descarga",
-                "Preparando PDF del comprobante de recaudación segura UPAGO. Tu descarga comenzará automáticamente en unos instantes.",
-                "fa-solid fa-file-pdf text-upago-blue"
-            );
-        }
+function confirmPac() {
+  closePacModal();
+  showAlert('PAC/PAT Activado',
+    'Tu suscripción a Pago Automático de Cuentas fue registrada con éxito. AIEP procesará el cargo mensual automáticamente.',
+    'fa-solid fa-circle-check text-upago-green');
+}
 
-        // Reiniciar portal para probar de nuevo la simulación
-        function restartPortal() {
-            location.reload();
-        }
-    </script>
+// ═══ PASO 2: TABS Y MÉTODO ═══
+function switchTab(tabId) {
+  st.tab = tabId;
+  document.querySelectorAll('.tab-content').forEach(c => { c.classList.add('hidden'); c.classList.remove('block'); });
+  const active = document.getElementById(tabId);
+  if (active) { active.classList.remove('hidden'); active.classList.add('block'); }
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.className = 'tab-btn flex-1 min-w-[110px] py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-gray-500 hover:text-upago-dark hover:bg-white/50';
+  });
+  const aBtn = document.getElementById('btn-' + tabId);
+  if (aBtn) aBtn.className = 'tab-btn flex-1 min-w-[110px] py-3 px-2 rounded-xl text-xs font-bold transition-all flex flex-col items-center gap-1.5 text-upago-blue bg-white shadow-sm border border-gray-100';
+}
+
+function selectMethod(name, tab) {
+  st.method = name;
+  document.getElementById('method-name').innerText = name;
+  const ip = document.getElementById('method-icon');
+  const icons = { bancos:'fa-building-columns', tarjetas:'fa-regular fa-credit-card', apps:'fa-mobile-screen-button', efectivo:'fa-store' };
+  const colors = { bancos:'bg-upago-blue/15 text-upago-blue', tarjetas:'bg-upago-green/15 text-upago-green', apps:'bg-amber-100 text-amber-700', efectivo:'bg-purple-100 text-purple-700' };
+  ip.innerHTML = `<i class="fa-solid ${icons[tab] || icons.bancos}"></i>`;
+  ip.className = 'h-8 w-8 ' + (colors[tab] || colors.bancos) + ' rounded-xl flex items-center justify-center text-sm font-bold';
+  document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('border-upago-blue','bg-upago-blue/5'));
+  event.currentTarget.classList.add('border-upago-blue','bg-upago-blue/5');
+}
+
+function filterPayment() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.payment-card').forEach(card => {
+    const t = card.querySelector('p') ? card.querySelector('p').innerText.toLowerCase() : '';
+    card.style.display = (t.includes(q)) ? 'flex' : 'none';
+  });
+  if (q.length > 0) { document.querySelectorAll('.tab-content').forEach(c => { c.classList.remove('hidden'); c.classList.add('block'); }); }
+  else switchTab(st.tab);
+}
+
+// ═══ MODAL PAGO FINAL ═══
+function openPayModal() {
+  if (!st.method) {
+    showAlert('Selecciona un medio de pago', 'Por favor elige un banco, tarjeta o billetera antes de continuar.', 'fa-solid fa-triangle-exclamation text-amber-500');
+    return;
+  }
+  document.getElementById('pay-title').innerText = st.method;
+  document.getElementById('pay-total').innerText = fmtCLP(st.total) + ' CLP';
+  const form = document.getElementById('pay-form');
+  if (st.tab === 'bancos') {
+    form.innerHTML = `<div class="space-y-3">
+      <label class="block text-xs font-bold text-gray-500 uppercase">Tipo de cuenta</label>
+      <select class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-upago-blue outline-none bg-white">
+        <option>Cuenta Corriente</option><option>Cuenta Vista / CuentaRUT</option><option>Cuenta de Ahorros</option>
+      </select>
+      <p class="text-[11px] text-gray-400"><i class="fa-solid fa-circle-info text-upago-blue mr-1"></i>Serás redirigido al portal oficial de tu banco.</p>
+    </div>`;
+  } else if (st.tab === 'tarjetas') {
+    form.innerHTML = `<div class="space-y-3">
+      <label class="block text-xs font-bold text-gray-500 uppercase">Número de Tarjeta</label>
+      <input type="text" placeholder="•••• •••• •••• ••••" class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-upago-blue outline-none font-mono">
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1">Vence</label><input type="text" placeholder="MM/AA" class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-upago-blue outline-none font-mono"></div>
+        <div><label class="block text-xs font-bold text-gray-400 uppercase mb-1">CVV</label><input type="password" placeholder="•••" class="w-full p-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-upago-blue outline-none font-mono"></div>
+      </div>
+    </div>`;
+  } else {
+    form.innerHTML = `<div class="space-y-3 text-center py-2">
+      <p class="text-sm font-semibold text-gray-600">Confirma tu correo de contacto:</p>
+      <input type="email" value="JUAN.OSORIOS@correoaiep.cl" class="w-full p-3 border border-gray-200 rounded-xl text-sm text-center focus:ring-2 focus:ring-upago-blue outline-none font-medium bg-white">
+      <span class="text-[11px] text-upago-green font-bold bg-upago-green/10 px-2.5 py-0.5 rounded-full inline-block"><i class="fa-solid fa-shield mr-1"></i>Protección antifraude activada</span>
+    </div>`;
+  }
+  document.getElementById('modal-pay').classList.remove('hidden');
+  setTimeout(() => document.getElementById('pay-container').classList.replace('scale-95','scale-100'), 50);
+}
+
+function closePayModal() {
+  document.getElementById('pay-container').classList.replace('scale-100','scale-95');
+  setTimeout(() => document.getElementById('modal-pay').classList.add('hidden'), 150);
+}
+
+// ═══ PASO 3 ═══
+function simulateSuccess() {
+  closePayModal();
+  setStepDone(2); setStepActive(3);
+  document.getElementById('r-method').innerText = st.method || '—';
+  document.getElementById('r-amount').innerText = fmtCLP(st.total) + ' CLP';
+  const now = new Date();
+  document.getElementById('r-date').innerText =
+    now.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) + ', ' +
+    now.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+  showScreen('screen-3');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function dlReceipt() {
+  showAlert('Preparando descarga','El PDF del comprobante estará listo en instantes.','fa-solid fa-file-pdf text-upago-blue');
+}
+
+function copyCode() {
+  navigator.clipboard.writeText('UP-TX-839281-2026').catch(()=>{});
+  const btn = event.currentTarget; const orig = btn.innerHTML;
+  btn.innerHTML = '<i class="fa-solid fa-clipboard-check text-upago-green"></i> ¡Copiado!';
+  setTimeout(() => btn.innerHTML = orig, 2000);
+}
+
+// ═══ NAVEGACIÓN ═══
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function setStepDone(n) {
+  document.getElementById('nav-step'+n).className = 'flex items-center text-upago-green opacity-80';
+  document.getElementById('badge-step'+n).className = 'h-7 w-7 rounded-full bg-upago-green/15 flex items-center justify-center font-bold text-xs border border-upago-green/30';
+  document.getElementById('badge-step'+n).innerHTML = '<i class="fa-solid fa-check"></i>';
+}
+
+function setStepActive(n) {
+  document.getElementById('nav-step'+n).className = 'flex items-center text-upago-blue';
+  document.getElementById('badge-step'+n).className = 'h-7 w-7 rounded-full bg-upago-blue text-white flex items-center justify-center font-bold text-xs';
+  document.getElementById('badge-step'+n).innerText = n;
+}
+
+// ═══ INIT ═══
+recalcS1();
+</script>
 </body>
 </html>
