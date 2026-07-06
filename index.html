@@ -21,6 +21,37 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
 .scrollbar-hide { -ms-overflow-style:none; scrollbar-width:none; }
 .screen { display:none; }
 .screen.active { display:block; }
+
+/* Scrollbar visible y elegante para paneles de resumen con overflow */
+.upago-scroll::-webkit-scrollbar { width:6px; }
+.upago-scroll::-webkit-scrollbar-track { background:transparent; }
+.upago-scroll::-webkit-scrollbar-thumb { background-color:#C7D3EC; border-radius:9999px; }
+.upago-scroll::-webkit-scrollbar-thumb:hover { background-color:#3F6FE8; }
+.upago-scroll { scrollbar-width:thin; scrollbar-color:#C7D3EC transparent; }
+
+/* Contenedor con indicador de "hay más contenido" (fade + flecha) */
+.scroll-fade-wrap { position:relative; }
+.scroll-fade-wrap::after {
+  content:'';
+  position:absolute; left:0; right:6px; bottom:0; height:22px;
+  background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.96));
+  pointer-events:none; opacity:1; transition:opacity .2s ease;
+  border-radius:0 0 12px 12px;
+}
+.scroll-fade-wrap.scrolled-bottom::after { opacity:0; }
+.scroll-hint {
+  position:absolute; right:2px; bottom:2px; z-index:2;
+  display:flex; align-items:center; justify-content:center;
+  width:18px; height:18px; border-radius:9999px;
+  background:#3F6FE8; color:#fff; font-size:8px;
+  animation: upago-bounce 1.4s ease-in-out infinite;
+  pointer-events:none; box-shadow:0 2px 6px rgba(63,111,232,.35);
+}
+.scroll-hint.hidden-hint { opacity:0; }
+@keyframes upago-bounce {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(3px); }
+}
 </style>
 </head>
 <body class="text-upago-dark min-h-screen antialiased">
@@ -611,7 +642,10 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
             </div>
 
             <!-- Cuotas dinámicas -->
-            <div class="space-y-2 border-t border-gray-100 pt-3 pr-1" id="s2-cuotas"></div>
+            <div class="relative scroll-fade-wrap" id="s2-cuotas-wrap">
+              <div class="space-y-2 border-t border-gray-100 pt-3 pr-1" id="s2-cuotas"></div>
+              <span class="scroll-hint hidden-hint" id="s2-scroll-hint"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
 
             <!-- Conteo + descuento -->
             <div class="space-y-2">
@@ -652,7 +686,7 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
 
             <!-- Botón Pagar -->
             <button onclick="openPayModal()" class="w-full bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-upago-blue/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
-              <span>PAGAR AHORA</span>
+              <span>PAGAR AHORA CON SEGURO</span>
               <i class="fa-solid fa-arrow-right-long"></i>
             </button>
 
@@ -757,7 +791,7 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
   </footer>
 
   <!-- Spacer para que el footer/contenido no quede oculto tras la barra móvil -->
-  <div class="h-24 lg:hidden"></div>
+  <div class="h-44 lg:hidden"></div>
 
 </div><!-- /flex-1 -->
 </div><!-- /min-h-screen flex -->
@@ -766,7 +800,22 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
 <!-- ════════════ BARRA FIJA MÓVIL (PAGAR + RESUMEN ACORDEÓN) ════════════ -->
 <div id="mobile-bar" class="hidden lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-6px_24px_rgba(0,0,0,0.10)]">
   <!-- Panel acordeón con el detalle de cuotas -->
-  <div id="mobile-summary-panel" class="hidden max-h-[45vh] overflow-y-auto scrollbar-hide border-b border-gray-100 px-4 pt-3 pb-2 bg-gray-50"></div>
+  <div id="mobile-summary-panel" class="hidden max-h-[45vh] overflow-y-auto upago-scroll border-b border-gray-100 px-4 pt-3 pb-2 bg-gray-50"></div>
+
+  <!-- Acciones rápidas del Paso 1 (Pago Total / Total Vencido / Suscribir PAC) -->
+  <div id="mb-step1-actions" class="hidden px-4 pt-3">
+    <div class="grid grid-cols-2 gap-2">
+      <button onclick="applyTotal()" class="bg-upago-dark hover:bg-upago-dark/90 text-white font-bold py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-[11px]">
+        <i class="fa-solid fa-credit-card text-[10px]"></i> Pago Total
+      </button>
+      <button onclick="applyVencido()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-[11px]">
+        <i class="fa-solid fa-calendar-xmark text-[10px]"></i> Total Vencido
+      </button>
+    </div>
+    <button onclick="openPacModal()" class="w-full mt-2 border-2 border-upago-green text-upago-green hover:bg-upago-green hover:text-white font-bold py-2 px-2 rounded-xl transition-all flex items-center justify-center gap-1.5 text-[11px]">
+      <i class="fa-solid fa-rotate text-[10px]"></i> Suscribir a Pago Automático
+    </button>
+  </div>
 
   <!-- Fila resumen (toggle) -->
   <button onclick="toggleMobileSummary()" class="w-full flex items-center justify-between px-4 pt-3 pb-1">
@@ -1119,10 +1168,10 @@ function goStep2() {
     showAlert('Sin cuotas', 'Selecciona al menos una cuota para continuar.', 'fa-solid fa-triangle-exclamation text-amber-500');
     return;
   }
-  populateS2();
   // Barra de pasos
   setStepDone(1); setStepActive(2);
   showScreen('screen-2');
+  populateS2();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -1143,9 +1192,11 @@ function populateS2() {
   badge.className = 'rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2 ' + cls;
   badge.innerHTML = `<i class="fa-solid ${icon}"></i><span>${lbl}</span>`;
 
-  // Lista cuotas (con scroll interno si superan 4, para que el botón
-  // "Pagar ahora" nunca se desplace fuera de vista)
+  // Lista cuotas (con scroll interno visible si superan 4, para que el
+  // botón "Pagar ahora" nunca se desplace fuera de vista)
   const list = document.getElementById('s2-cuotas');
+  const wrap = document.getElementById('s2-cuotas-wrap');
+  const hint = document.getElementById('s2-scroll-hint');
   const maxShow = 4;
   let html = '';
   sel.forEach(c => {
@@ -1155,10 +1206,22 @@ function populateS2() {
     </div>`;
   });
   list.innerHTML = html;
+
   if (sel.length > maxShow) {
-    list.classList.add('max-h-40', 'overflow-y-auto', 'scrollbar-hide');
+    list.classList.add('max-h-40', 'overflow-y-auto', 'upago-scroll');
+    wrap.classList.remove('scrolled-bottom');
+    hint.classList.remove('hidden-hint');
+    // Oculta el fade/hint al llegar al fondo, los reactiva si vuelve a subir
+    list.onscroll = () => {
+      const atBottom = list.scrollTop + list.clientHeight >= list.scrollHeight - 4;
+      wrap.classList.toggle('scrolled-bottom', atBottom);
+      hint.classList.toggle('hidden-hint', atBottom);
+    };
   } else {
-    list.classList.remove('max-h-40', 'overflow-y-auto', 'scrollbar-hide');
+    list.classList.remove('max-h-40', 'overflow-y-auto', 'upago-scroll');
+    wrap.classList.add('scrolled-bottom');
+    hint.classList.add('hidden-hint');
+    list.onscroll = null;
   }
 
   document.getElementById('s2-count').innerText = sel.length;
@@ -1357,6 +1420,9 @@ function updateMobileBar() {
 
   document.getElementById('mb-total').innerText = st.total > 0 ? fmtCLP(st.total) + ' CLP' : '—';
   document.getElementById('mb-cta-label').innerText = s1active ? 'Pagar' : 'Pagar Ahora';
+
+  // Acciones rápidas (Pago Total / Total Vencido / Suscribir PAC) — solo Paso 1
+  document.getElementById('mb-step1-actions').classList.toggle('hidden', !s1active);
 
   // Colapsar el panel al cambiar de contexto
   document.getElementById('mobile-summary-panel').classList.add('hidden');
