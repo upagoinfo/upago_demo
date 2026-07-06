@@ -381,8 +381,8 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
               </div>
             </div>
 
-            <!-- Ahorro por Pago Total -->
-            <div id="s1-ahorro-box" class="hidden bg-upago-green/10 border border-upago-green/20 rounded-2xl p-3.5 flex items-center justify-between gap-2">
+            <!-- Ahorro por Pago Total (solo escritorio — en mobile vive en la barra anclada) -->
+            <div id="s1-ahorro-box" class="hidden max-lg:hidden bg-upago-green/10 border border-upago-green/20 rounded-2xl p-3.5 flex items-center justify-between gap-2">
               <div class="flex items-center gap-2">
                 <div class="bg-upago-green/20 text-upago-green p-2 rounded-xl"><i class="fa-solid fa-piggy-bank text-sm"></i></div>
                 <div>
@@ -402,9 +402,9 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
               </div>
             </div>
 
-            <!-- BTN PAGAR -->
+            <!-- BTN PAGAR (solo escritorio — en mobile vive en la barra anclada) -->
             <button onclick="goStep2()"
-              class="w-full bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-upago-blue/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              class="hidden lg:flex w-full bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-upago-blue/20 transition-all transform hover:-translate-y-0.5 items-center justify-center gap-2"
               id="btn-pagar">
               <i class="fa-solid fa-lock text-sm"></i> Pagar <i class="fa-solid fa-arrow-right-long text-sm"></i>
             </button>
@@ -415,14 +415,14 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
               Cancelar
             </button>
 
-            <!-- BTN SUSCRIBIR PAC -->
+            <!-- BTN SUSCRIBIR PAC (solo escritorio — en mobile vive en la barra anclada) -->
             <button onclick="openPacModal()"
-              class="w-full border-2 border-upago-green text-upago-green hover:bg-upago-green hover:text-white font-bold py-3 px-6 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm">
+              class="hidden lg:flex w-full border-2 border-upago-green text-upago-green hover:bg-upago-green hover:text-white font-bold py-3 px-6 rounded-2xl transition-all items-center justify-center gap-2 text-sm">
               <i class="fa-solid fa-rotate"></i> Suscribir a Pago Automático
             </button>
 
-            <!-- PAGO TOTAL y PAGO TOTAL VENCIDO -->
-            <div class="grid grid-cols-2 gap-3 pt-1">
+            <!-- PAGO TOTAL y PAGO TOTAL VENCIDO (solo escritorio — en mobile viven en la barra anclada) -->
+            <div class="hidden lg:grid grid-cols-2 gap-3 pt-1">
 
               <!-- PAGO TOTAL -->
               <div class="relative group">
@@ -684,9 +684,9 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
               </div>
             </div>
 
-            <!-- Botón Pagar -->
-            <button onclick="openPayModal()" class="w-full bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-upago-blue/20 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
-              <span>PAGAR AHORA</span>
+            <!-- Botón Pagar (solo escritorio — en mobile vive en la barra anclada) -->
+            <button onclick="openPayModal()" class="hidden lg:flex w-full bg-upago-blue hover:bg-upago-blue/90 text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-upago-blue/20 transition-all transform hover:-translate-y-0.5 items-center justify-center gap-2">
+              <span>PAGAR AHORA CON SEGURO</span>
               <i class="fa-solid fa-arrow-right-long"></i>
             </button>
 
@@ -799,8 +799,32 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
 
 <!-- ════════════ BARRA FIJA MÓVIL (PAGAR + RESUMEN ACORDEÓN) ════════════ -->
 <div id="mobile-bar" class="hidden lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-gray-200 shadow-[0_-6px_24px_rgba(0,0,0,0.10)]">
-  <!-- Panel acordeón con el detalle de cuotas -->
-  <div id="mobile-summary-panel" class="hidden max-h-[45vh] overflow-y-auto upago-scroll border-b border-gray-100 px-4 pt-3 pb-2 bg-gray-50"></div>
+
+  <!-- Banner de ahorro (solo Paso 1, cuando Pago Total está seleccionado) -->
+  <div id="mb-ahorro-banner" class="hidden mx-4 mt-3 bg-upago-green/10 border border-upago-green/20 rounded-2xl p-3 flex items-center justify-between gap-2">
+    <div class="flex items-center gap-2">
+      <div class="bg-upago-green/20 text-upago-green p-2 rounded-xl flex-shrink-0"><i class="fa-solid fa-piggy-bank text-sm"></i></div>
+      <div>
+        <p class="text-[11px] font-bold text-upago-dark leading-tight">Te ahorras al pagar todo hoy</p>
+        <p class="text-[10px] text-gray-500 leading-tight">Evitas comisiones por mora / atraso futuras</p>
+      </div>
+    </div>
+    <span class="text-sm font-extrabold text-upago-green whitespace-nowrap" id="mb-ahorro-monto">$0</span>
+  </div>
+
+  <!-- Resumen (toggle) + panel acordeón — SOLO Paso 2 -->
+  <div id="mb-summary-toggle-wrap" class="hidden">
+    <div id="mobile-summary-panel" class="hidden max-h-[45vh] overflow-y-auto upago-scroll border-b border-gray-100 px-4 pt-3 pb-2 bg-gray-50"></div>
+    <button onclick="toggleMobileSummary()" class="w-full flex items-center justify-between px-4 pt-3 pb-1">
+      <div class="text-left">
+        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total a pagar</p>
+        <p class="text-base font-extrabold text-upago-blue" id="mb-total">—</p>
+      </div>
+      <span class="text-[11px] font-bold text-gray-400 flex items-center gap-1.5">
+        Ver resumen <i class="fa-solid fa-chevron-up text-[10px]" id="mb-chevron"></i>
+      </span>
+    </button>
+  </div>
 
   <!-- Acciones rápidas del Paso 1 (Pago Total / Total Vencido / Suscribir PAC) -->
   <div id="mb-step1-actions" class="hidden px-4 pt-3">
@@ -816,17 +840,6 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
       <i class="fa-solid fa-rotate text-[10px]"></i> Suscribir a Pago Automático
     </button>
   </div>
-
-  <!-- Fila resumen (toggle) -->
-  <button onclick="toggleMobileSummary()" class="w-full flex items-center justify-between px-4 pt-3 pb-1">
-    <div class="text-left">
-      <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total a pagar</p>
-      <p class="text-base font-extrabold text-upago-blue" id="mb-total">—</p>
-    </div>
-    <span class="text-[11px] font-bold text-gray-400 flex items-center gap-1.5">
-      Ver resumen <i class="fa-solid fa-chevron-up text-[10px]" id="mb-chevron"></i>
-    </span>
-  </button>
 
   <!-- CTA siempre visible -->
   <div class="px-4 pt-2 pb-4">
@@ -1083,6 +1096,17 @@ function renderChecks() {
 // las cuotas vigentes (aún no vencidas). Ajustable según política de AIEP.
 const TASA_MORA_ESTIMADA = 0.08;
 
+// Calcula si corresponde mostrar el ahorro (solo aplica con Pago Total,
+// es decir, cuando TODAS las cuotas están seleccionadas) y su monto.
+function calcAhorro() {
+  const sel = CUOTAS.filter(c => st.selected.has(c.id));
+  const todasSeleccionadas = sel.length === CUOTAS.length && CUOTAS.length > 0;
+  if (!todasSeleccionadas) return { show:false, monto:0 };
+  const montoVigentes = CUOTAS.filter(c => !c.vencida).reduce((s,c) => s+c.monto, 0);
+  const ahorro = Math.round(montoVigentes * TASA_MORA_ESTIMADA);
+  return { show: ahorro > 0, monto: ahorro };
+}
+
 function recalcS1() {
   const sel = CUOTAS.filter(c => st.selected.has(c.id));
   const total = sel.reduce((s,c) => s+c.monto, 0);
@@ -1094,18 +1118,12 @@ function recalcS1() {
   document.getElementById('s1-total').innerText = total > 0 ? fmtCLP(total) : '—';
 
   // Ahorro estimado: solo aplica si la selección cubre TODAS las cuotas
-  // (Pago Total), ya que ahí se evita que las cuotas vigentes generen
-  // mora a futuro.
+  // (Pago Total). Este box vive únicamente en el panel de escritorio;
+  // en mobile el mismo dato se muestra en la barra anclada.
   const ahorroBox = document.getElementById('s1-ahorro-box');
-  const todasSeleccionadas = sel.length === CUOTAS.length && CUOTAS.length > 0;
-  if (todasSeleccionadas) {
-    const montoVigentes = CUOTAS.filter(c => !c.vencida).reduce((s,c) => s+c.monto, 0);
-    const ahorro = Math.round(montoVigentes * TASA_MORA_ESTIMADA);
-    document.getElementById('s1-ahorro').innerText = fmtCLP(ahorro) + ' CLP';
-    ahorroBox.classList.toggle('hidden', ahorro <= 0);
-  } else {
-    ahorroBox.classList.add('hidden');
-  }
+  const { show, monto } = calcAhorro();
+  document.getElementById('s1-ahorro').innerText = fmtCLP(monto) + ' CLP';
+  ahorroBox.classList.toggle('hidden', !show);
 
   const btn = document.getElementById('btn-pagar');
   btn.disabled = total === 0;
@@ -1418,11 +1436,27 @@ function updateMobileBar() {
   if (!s1active && !s2active) { bar.classList.add('hidden'); return; }
   bar.classList.remove('hidden');
 
-  document.getElementById('mb-total').innerText = st.total > 0 ? fmtCLP(st.total) + ' CLP' : '—';
   document.getElementById('mb-cta-label').innerText = s1active ? 'Pagar' : 'Pagar Ahora';
 
   // Acciones rápidas (Pago Total / Total Vencido / Suscribir PAC) — solo Paso 1
   document.getElementById('mb-step1-actions').classList.toggle('hidden', !s1active);
+
+  // "Ver resumen" (toggle + acordeón) — SOLO Paso 2. En Paso 1 no aplica,
+  // ya que el resumen vive en el contenido principal de la página.
+  document.getElementById('mb-summary-toggle-wrap').classList.toggle('hidden', !s2active);
+  if (s2active) {
+    document.getElementById('mb-total').innerText = st.total > 0 ? fmtCLP(st.total) + ' CLP' : '—';
+  }
+
+  // Banner de ahorro por Pago Total — SOLO Paso 1
+  const ahorroBanner = document.getElementById('mb-ahorro-banner');
+  if (s1active) {
+    const { show, monto } = calcAhorro();
+    document.getElementById('mb-ahorro-monto').innerText = fmtCLP(monto) + ' CLP';
+    ahorroBanner.classList.toggle('hidden', !show);
+  } else {
+    ahorroBanner.classList.add('hidden');
+  }
 
   // Colapsar el panel al cambiar de contexto
   document.getElementById('mobile-summary-panel').classList.add('hidden');
