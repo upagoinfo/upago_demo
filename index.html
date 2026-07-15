@@ -636,13 +636,13 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
               <div class="bg-upago-blue/5 text-upago-blue p-2.5 rounded-xl"><i class="fa-solid fa-graduation-cap text-lg"></i></div>
             </div>
 
-            <!-- Badge tipo operación -->
-            <div id="s2-badge" class="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2 bg-upago-blue/10 text-upago-blue">
+            <!-- Badge tipo operación (solo escritorio — en mobile vive en "Ver resumen" de la barra anclada) -->
+            <div id="s2-badge" class="max-lg:hidden rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2 bg-upago-blue/10 text-upago-blue">
               <i class="fa-solid fa-list-check"></i><span id="s2-badge-label">Pago seleccionado</span>
             </div>
 
-            <!-- Cuotas dinámicas -->
-            <div class="relative scroll-fade-wrap" id="s2-cuotas-wrap">
+            <!-- Cuotas dinámicas (solo escritorio — en mobile vive en "Ver resumen" de la barra anclada) -->
+            <div class="max-lg:hidden relative scroll-fade-wrap" id="s2-cuotas-wrap">
               <div class="space-y-2 border-t border-gray-100 pt-3 pr-1" id="s2-cuotas"></div>
               <span class="scroll-hint hidden-hint" id="s2-scroll-hint"><i class="fa-solid fa-chevron-down"></i></span>
             </div>
@@ -658,8 +658,8 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
               </div>
             </div>
 
-            <!-- Método elegido -->
-            <div class="border-t border-gray-100 pt-4 space-y-3">
+            <!-- Método elegido (solo escritorio — en mobile vive anclado junto a Total/Ver resumen) -->
+            <div class="max-lg:hidden border-t border-gray-100 pt-4 space-y-3">
               <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Método de pago elegido</p>
               <div class="bg-upago-blue/5 border border-upago-blue/10 rounded-2xl p-3.5 flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -815,7 +815,14 @@ body { font-family:'Inter',sans-serif; background-color:#F3F4F6; }
   <!-- Resumen (toggle) + panel acordeón — SOLO Paso 2 -->
   <div id="mb-summary-toggle-wrap" class="hidden">
     <div id="mobile-summary-panel" class="hidden max-h-[45vh] overflow-y-auto upago-scroll border-b border-gray-100 px-4 pt-3 pb-2 bg-gray-50"></div>
-    <button onclick="toggleMobileSummary()" class="w-full flex items-center justify-between px-4 pt-3 pb-1">
+
+    <!-- Método de pago — siempre visible, anclado junto a Total/Ver resumen -->
+    <div class="flex items-center justify-between px-4 pt-3 pb-1 border-t border-gray-100">
+      <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Método de pago</span>
+      <span class="text-xs font-bold text-upago-dark" id="mb-method-name">—</span>
+    </div>
+
+    <button onclick="toggleMobileSummary()" class="w-full flex items-center justify-between px-4 pt-2 pb-1">
       <div class="text-left">
         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total a pagar</p>
         <p class="text-base font-extrabold text-upago-blue" id="mb-total">—</p>
@@ -1193,6 +1200,14 @@ function goStep2() {
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
+// Metadata compartida del tipo de operación (usada en el badge de escritorio
+// y en el desplegable "Ver resumen" de la barra anclada móvil)
+const OP_TYPE_META = {
+  total:   ['bg-upago-blue/10 text-upago-blue',  'fa-credit-card',    'Pago Total — Todas las cuotas'],
+  vencido: ['bg-red-50 text-red-600',             'fa-calendar-xmark', 'Pago Total Vencido — Deuda atrasada'],
+  manual:  ['bg-gray-100 text-gray-600',          'fa-list-check',     'Pago seleccionado manualmente'],
+};
+
 function populateS2() {
   const sel = CUOTAS.filter(c => st.selected.has(c.id));
   const total = sel.reduce((s,c) => s+c.monto, 0);
@@ -1200,14 +1215,8 @@ function populateS2() {
 
   // Badge tipo operación
   const badge = document.getElementById('s2-badge');
-  const label = document.getElementById('s2-badge-label');
-  const types = {
-    total:   ['bg-upago-blue/10 text-upago-blue',  'fa-credit-card',    'Pago Total — Todas las cuotas'],
-    vencido: ['bg-red-50 text-red-600',             'fa-calendar-xmark', 'Pago Total Vencido — Deuda atrasada'],
-    manual:  ['bg-gray-100 text-gray-600',          'fa-list-check',     'Pago seleccionado manualmente'],
-  };
-  const [cls, icon, lbl] = types[st.opType] || types.manual;
-  badge.className = 'rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2 ' + cls;
+  const [cls, icon, lbl] = OP_TYPE_META[st.opType] || OP_TYPE_META.manual;
+  badge.className = 'max-lg:hidden rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2 ' + cls;
   badge.innerHTML = `<i class="fa-solid ${icon}"></i><span>${lbl}</span>`;
 
   // Lista cuotas (con scroll interno visible si superan 4, para que el
@@ -1446,6 +1455,7 @@ function updateMobileBar() {
   document.getElementById('mb-summary-toggle-wrap').classList.toggle('hidden', !s2active);
   if (s2active) {
     document.getElementById('mb-total').innerText = st.total > 0 ? fmtCLP(st.total) + ' CLP' : '—';
+    document.getElementById('mb-method-name').innerText = st.method || '—';
   }
 
   // Banner de ahorro por Pago Total — SOLO Paso 1
@@ -1463,22 +1473,22 @@ function updateMobileBar() {
   document.getElementById('mb-chevron').classList.remove('fa-chevron-down');
   document.getElementById('mb-chevron').classList.add('fa-chevron-up');
 
-  // Detalle de cuotas seleccionadas (con scroll interno propio del panel)
+  // Detalle de cuotas seleccionadas (con scroll interno propio del panel).
+  // Incluye el badge de tipo de operación (Pago Total / Vencido / Manual),
+  // que en mobile vive únicamente aquí dentro del desplegable.
   const sel = CUOTAS.filter(c => st.selected.has(c.id));
   const panel = document.getElementById('mobile-summary-panel');
-  let html = '<p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Detalle de cuotas</p>';
+  const [cls, icon, lbl] = OP_TYPE_META[st.opType] || OP_TYPE_META.manual;
+  let html = `<div class="rounded-xl px-3 py-2 text-xs font-bold flex items-center gap-2 mb-3 ${cls}">
+    <i class="fa-solid ${icon}"></i><span>${lbl}</span>
+  </div>`;
+  html += '<p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Detalle de cuotas</p>';
   sel.forEach(c => {
     html += `<div class="flex items-center justify-between text-xs py-1.5 border-b border-gray-100 last:border-0">
       <span class="text-gray-500 truncate max-w-[200px]">${c.label}</span>
       <span class="font-semibold text-upago-dark ml-2 whitespace-nowrap">${fmtCLP(c.monto)}</span>
     </div>`;
   });
-  if (s2active && st.method) {
-    html += `<div class="flex items-center justify-between text-xs pt-2 mt-1 border-t border-gray-200">
-      <span class="text-gray-500">Método de pago</span>
-      <span class="font-bold text-upago-dark">${st.method}</span>
-    </div>`;
-  }
   panel.innerHTML = html;
 }
 
